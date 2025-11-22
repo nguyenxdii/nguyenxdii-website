@@ -6,13 +6,20 @@
     <title>Dự Án | Dii Nguyễn</title>
     <link rel="stylesheet" href="css/style.css" />
     <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
+    <div class="cursor-glow"></div>
+
     <nav>
       <a href="index.html" class="logo">Dii.EXE</a>
+      <div class="hamburger"><i class="fa-solid fa-bars"></i></div>
       <ul class="nav-links">
         <li><a href="index.html">Trang chủ</a></li>
         <li><a href="projects.html" class="active">Dự án</a></li>
@@ -24,39 +31,107 @@
       <div class="project-grid">
         <div class="project-item">
           <h3 class="project-title">Logistics App</h3>
-          <p style="margin-bottom: 10px; color: #ccc">
-            Đồ án quản lý vận chuyển logistics, bao gồm quản lý kho, tài xế và
-            đơn hàng.
+          <p style="margin-bottom: 15px; color: #ccc; font-size: 0.9rem">
+            Hệ thống quản lý vận tải, theo dõi đơn hàng và điều phối tài xế. Tối
+            ưu hóa quy trình kho bãi.
           </p>
           <div class="tech-stack">
-            <span>C#</span> <span>WinForm</span> <span>SQL</span>
+            <span>C#</span>
+            <span>WinForm</span>
           </div>
-          <a href="#" class="btn">Xem chi tiết</a>
+          <a href="#" class="btn btn-primary">Xem chi tiết</a>
         </div>
 
         <div class="project-item">
           <h3 class="project-title">Stationery Shop</h3>
-          <p style="margin-bottom: 10px; color: #ccc">
-            Phần mềm quản lý cửa hàng văn phòng phẩm, quản lý nhập xuất tồn.
+          <p style="margin-bottom: 15px; color: #ccc; font-size: 0.9rem">
+            Phần mềm quản lý bán hàng văn phòng phẩm, báo cáo doanh thu và quản
+            lý tồn kho.
           </p>
-          <div class="tech-stack"><span>Java</span> <span>MySQL</span></div>
-          <a href="#" class="btn">Xem chi tiết</a>
+          <div class="tech-stack">
+            <span>Java</span>
+            <span>MySQL</span>
+          </div>
+          <a href="#" class="btn btn-primary">Xem chi tiết</a>
         </div>
 
         <div class="project-item">
-          <h3 class="project-title">My Profile Web</h3>
-          <p style="margin-bottom: 10px; color: #ccc">
-            Trang web cá nhân bạn đang xem, thiết kế phong cách Neon
-            Glassmorphism.
+          <h3 class="project-title">Portfolio Web</h3>
+          <p style="margin-bottom: 15px; color: #ccc; font-size: 0.9rem">
+            Website cá nhân phong cách Neon Glassmorphism. Responsive và
+            Interactive.
           </p>
-          <div class="tech-stack"><span>HTML</span> <span>CSS</span></div>
-          <a href="#" class="btn">Xem chi tiết</a>
+          <div class="tech-stack">
+            <span>HTML</span>
+            <span>CSS</span>
+            <span>JS</span>
+          </div>
+          <a href="#" class="btn btn-primary">Xem chi tiết</a>
         </div>
       </div>
     </div>
 
     <footer>
-      <p>&copy; 2025 Dii Nguyen. All rights reserved.</p>
+      <div class="footer-container">
+        <div class="footer-col">
+          <a href="index.html" class="footer-logo">Dii.EXE</a>
+          <p class="footer-desc">
+            Website cá nhân chia sẻ về lập trình, dự án và đam mê.<br />
+            "It might not run after I finish coding, but if it runs… I'm not
+            touching it again."
+          </p>
+          <div class="footer-socials">
+            <a href="https://fb.com/dii.exe411" target="_blank"
+              ><i class="fa-brands fa-facebook"></i
+            ></a>
+            <a href="https://github.com/nguyenxdii" target="_blank"
+              ><i class="fa-brands fa-github"></i
+            ></a>
+            <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@dii.exe"
+              target="_blank"
+              ><i class="fa-solid fa-envelope"></i
+            ></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Khám Phá</h4>
+          <ul>
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="projects.html">Dự án của tôi</a></li>
+            <li><a href="contact.html">Liên hệ / Thuê</a></li>
+            <li><a href="#">Blog cá nhân</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Chuyên Môn</h4>
+          <ul>
+            <li><a href="#">Lập trình Web</a></li>
+            <li><a href="#">Ứng dụng Windows</a></li>
+            <li><a href="#">UI/UX Design</a></li>
+            <li><a href="#">Database Design</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Liên Hệ</h4>
+          <ul class="contact-info">
+            <li>
+              <i class="fa-solid fa-location-dot"></i> TP. Hồ Chí Minh, Việt Nam
+            </li>
+            <li><i class="fa-solid fa-phone"></i> +84 123 456 789</li>
+            <li><i class="fa-solid fa-envelope"></i> contact@dii.exe</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Dii Nguyen. If the site runs, consider it a miracle.</p>
+      </div>
     </footer>
+
+    <script src="js/script.js"></script>
   </body>
 </html>
