@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: var(--neon-primary); /* Màu xanh neon chủ đạo */
+  background: var(--neon-primary);
   transition: all 0.2s ease;
   z-index: 9999;
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
@@ -24,7 +24,7 @@ body.show-chatbot .chatbot-toggler {
   transform: rotate(90deg);
 }
 .chatbot-toggler span {
-  color: #0f172a; /* Màu chữ tối trên nền neon */
+  color: #0f172a;
   position: absolute;
   font-size: 1.2rem;
 }
@@ -40,8 +40,8 @@ body.show-chatbot .chatbot-toggler span:last-child {
   position: fixed;
   right: 35px;
   bottom: 90px;
-  width: 350px; /* Độ rộng vừa phải */
-  background: rgba(15, 23, 42, 0.95); /* Màu nền tối giống web */
+  width: 350px;
+  background: rgba(15, 23, 42, 0.95);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(15px);
   border-radius: 15px;
@@ -79,7 +79,7 @@ body.show-chatbot .chatbot {
 }
 .chatbot .chatbox {
   overflow-y: auto;
-  height: 350px; /* Chiều cao cửa sổ chat */
+  height: 350px;
   padding: 15px 20px 70px;
 }
 .chatbot :where(.chatbox, textarea)::-webkit-scrollbar {
@@ -101,34 +101,76 @@ body.show-chatbot .chatbot {
   margin: 20px 0;
   justify-content: flex-end;
 }
-.chatbox .incoming span {
+
+/* Style cho Avatar của Bot */
+.chatbox .incoming .bot-avatar {
   width: 32px;
   height: 32px;
-  color: #fff;
-  cursor: default;
-  text-align: center;
-  line-height: 32px;
-  align-self: flex-end;
-  background: var(--neon-secondary); /* Màu tím cho icon bot */
-  border-radius: 4px;
+  border-radius: 50%;
   margin: 0 10px 7px 0;
+  object-fit: cover;
+  align-self: flex-end;
+  border: 1px solid var(--neon-secondary);
+  background: #fff; /* Màu nền dự phòng nếu ảnh lỗi */
 }
+
+/* Style chung cho tin nhắn */
 .chatbox .chat p {
   white-space: pre-wrap;
-  padding: 12px 16px;
+  padding: 10px 14px; /* Đã giảm padding */
   border-radius: 10px 10px 0 10px;
-  max-width: 75%;
-  color: #fff;
-  font-size: 0.95rem;
-  background: var(--neon-primary); /* Tin nhắn user màu xanh */
+  max-width: 80%; /* Tăng max-width lên 80% để chữ đỡ bị ngắt dòng xấu */
+  font-size: 0.9rem; /* Đã giảm cỡ chữ */
+  line-height: 1.4;
+  background: var(--neon-primary);
   color: #0f172a;
 }
 .chatbox .incoming p {
   border-radius: 10px 10px 10px 0;
-  background: rgba(255, 255, 255, 0.1); /* Tin nhắn bot màu xám trong */
+  background: rgba(255, 255, 255, 0.1);
   color: #e2e8f0;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* --- HIỆU ỨNG TYPING (BA CHẤM ĐỘNG) --- */
+.chatbox .incoming.typing p {
+  width: fit-content;
+  max-width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 14px;
+}
+
+.chatbox .incoming.typing p span {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  animation: bounce 0.8s infinite ease-in-out;
+}
+
+.chatbox .incoming.typing p span:nth-child(1) {
+  animation-delay: 0s;
+}
+.chatbox .incoming.typing p span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.chatbox .incoming.typing p span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+/* ------------------------------------- */
 
 .chatbot .chat-input {
   display: flex;
@@ -148,7 +190,7 @@ body.show-chatbot .chatbot {
   resize: none;
   max-height: 180px;
   padding: 15px 15px 15px 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem; /* Đồng bộ cỡ chữ input */
   background: transparent;
   color: #fff;
 }
@@ -179,18 +221,6 @@ body.show-chatbot .chatbot {
     width: 100%;
   }
   .chatbox .chat p {
-    white-space: pre-wrap;
-    padding: 12px 16px;
-    border-radius: 10px 10px 0 10px;
-    max-width: 75%;
-
-    font-family: "Be Vietnam Pro", sans-serif; /* Bắt buộc dùng font đẹp */
-    font-size: 0.95rem; /* Cỡ chữ vừa mắt */
-    line-height: 1.5; /* Khoảng cách dòng thoáng hơn */
-    letter-spacing: 0.3px; /* Khoảng cách chữ giúp dễ đọc */
-
-    background: var(--neon-primary);
-    color: #0f172a;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Thêm chút bóng cho nổi */
+    max-width: 80%;
   }
 }

@@ -32,17 +32,31 @@ Hãy trả lời các câu hỏi của khách truy cập dựa trên thông tin 
 const createChatLi = (message, className) => {
   const chatLi = document.createElement("li");
   chatLi.classList.add("chat", className);
+
   let chatContent =
     className === "outgoing"
       ? `<p></p>`
       : `<img src="assets/images/bot-avatar.png" alt="Bot" class="bot-avatar"><p></p>`;
+
   chatLi.innerHTML = chatContent;
-  chatLi.querySelector("p").textContent = message;
+
+  // Nếu là typing animation thì chèn HTML, nếu là text thường thì chèn textContent
+  if (message === "...") {
+    chatLi.querySelector(
+      "p"
+    ).innerHTML = `<span></span><span></span><span></span>`;
+  } else {
+    chatLi.querySelector("p").textContent = message;
+  }
+
   return chatLi;
 };
 
 const generateResponse = async (chatElement) => {
   const messageElement = chatElement.querySelector("p");
+
+  // Thêm class typing để kích hoạt CSS animation
+  chatElement.classList.add("typing");
 
   // Cấu trúc Request gửi lên Gemini
   const requestOptions = {
@@ -64,13 +78,14 @@ const generateResponse = async (chatElement) => {
   };
 
   try {
-    messageElement.textContent = "Đang suy nghĩ...";
     const response = await fetch(API_URL, requestOptions);
     const data = await response.json();
     if (!response.ok) throw new Error(data.error.message);
 
     // Lấy text trả về từ Gemini
     const apiResponse = data.candidates[0].content.parts[0].text.trim();
+
+    // Gán nội dung trả lời
     messageElement.textContent = apiResponse;
   } catch (error) {
     messageElement.textContent =
@@ -79,6 +94,8 @@ const generateResponse = async (chatElement) => {
       ")";
     messageElement.style.color = "#ff6b6b";
   } finally {
+    // Xóa class typing sau khi đã có câu trả lời (để mất hiệu ứng 3 chấm và padding của typing)
+    chatElement.classList.remove("typing");
     chatbox.scrollTo(0, chatbox.scrollHeight);
   }
 };
@@ -94,8 +111,9 @@ const handleChat = () => {
   chatbox.appendChild(createChatLi(userMessage, "outgoing"));
   chatbox.scrollTo(0, chatbox.scrollHeight);
 
-  // 2. Hiển thị trạng thái "Đang nhập..." của Bot
+  // 2. Hiển thị trạng thái "Đang nhập..." (hiệu ứng 3 chấm)
   setTimeout(() => {
+    // Truyền "..." để createChatLi nhận biết và tạo các thẻ span
     const incomingChatLi = createChatLi("...", "incoming");
     chatbox.appendChild(incomingChatLi);
     chatbox.scrollTo(0, chatbox.scrollHeight);
