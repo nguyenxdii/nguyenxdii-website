@@ -1,4 +1,9 @@
-/* js/chatbot.js - PHIÊN BẢN "BỘ NHỚ DAI" & AUTO-RESUME */
+/* js/chatbot.js - Chatbox luôn mở mượt mà, không lưu lịch sử */
+
+const shouldAutoShow = localStorage.getItem("chat_is_open") === "true";
+if (shouldAutoShow) {
+  document.body.classList.add("show-chatbot");
+}
 
 const chatbotHTML = `
   <div class="chatbot-toggler">
@@ -66,73 +71,34 @@ const initChatbot = () => {
   // --- CÁC HÀM LƯU TRỮ TRẠNG THÁI (localStorage) ---
 
   const saveState = () => {
-    // 1. Lưu HTML lịch sử chat
-    localStorage.setItem("chat_history", chatbox.innerHTML);
-
-    // 2. Lưu trạng thái mở/đóng
+    // Chỉ lưu trạng thái mở/đóng để giữ nguyên hiển thị khi chuyển trang
     const isOpen = document.body.classList.contains("show-chatbot");
     localStorage.setItem("chat_is_open", isOpen);
-
-    // 3. Lưu trạng thái đang gõ dở (nếu có)
-    localStorage.setItem("chat_is_generating", isGenerating);
   };
 
   const loadState = () => {
+    // Dọn dẹp các khóa cũ để không lưu lịch sử chat
+    localStorage.removeItem("chat_history");
+    localStorage.removeItem("chat_is_generating");
+    localStorage.removeItem("chat_last_prompt");
+
     // 1. Khôi phục trạng thái MỞ/ĐÓNG (Sửa lỗi nháy hình)
     const isOpen = localStorage.getItem("chat_is_open") === "true";
     if (isOpen) {
       document.body.classList.add("show-chatbot");
-      // Thêm class tắt hiệu ứng để nó hiện ngay lập tức
       chatbot.classList.add("no-transition");
-      // Sau 100ms thì xóa class này đi để các lần sau vẫn có hiệu ứng đẹp
-      setTimeout(() => chatbot.classList.remove("no-transition"), 100);
+      requestAnimationFrame(() => chatbot.classList.remove("no-transition"));
     }
 
-    // 2. Khôi phục LỊCH SỬ CHAT
-    const savedHistory = localStorage.getItem("chat_history");
-    if (savedHistory) {
-      chatbox.innerHTML = savedHistory;
-      reattachFAQEvents(); // Gán lại sự kiện click cho các nút FAQ cũ
-    } else {
-      // Lần đầu tiên vào web -> Hiện FAQ mặc định
-      setTimeout(() => {
-        appendFAQ([
-          "Dii là ai?",
-          "Kỹ năng chuyên môn?",
-          "Các dự án tiêu biểu?",
-          "Thông tin liên hệ?",
-        ]);
-      }, 600);
-    }
-
-    // 3. Xử lý AUTO-RESUME (Nếu chuyển trang khi đang chờ trả lời)
-    const wasGenerating = localStorage.getItem("chat_is_generating") === "true";
-    const lastPrompt = localStorage.getItem("chat_last_prompt");
-
-    if (wasGenerating && lastPrompt) {
-      // Xóa bong bóng "typing..." cũ nếu bị kẹt lại trong HTML
-      const stuckTyping = chatbox.querySelector(".chat.incoming.typing");
-      if (stuckTyping) stuckTyping.remove();
-
-      // Gọi lại API ngay lập tức (Resume)
-      isGenerating = true; // Set cờ để khóa nút gửi
-      generateResponse(null, lastPrompt); // Gọi hàm trả lời với prompt cũ
-    }
+    // Hiện FAQ mặc định ngay khi khởi tạo để tránh cảm giác tải lại
+    appendFAQ([
+      "Dii là ai?",
+      "Kỹ năng chuyên môn?",
+      "Các dự án tiêu biểu?",
+      "Thông tin liên hệ?",
+    ]);
 
     chatbox.scrollTo(0, chatbox.scrollHeight);
-  };
-
-  const reattachFAQEvents = () => {
-    const chips = chatbox.querySelectorAll(".suggestion-chip");
-    chips.forEach((chip) => {
-      const newChip = chip.cloneNode(true);
-      chip.parentNode.replaceChild(newChip, chip);
-      newChip.addEventListener("click", () => {
-        if (isGenerating) return;
-        chatInput.value = newChip.textContent;
-        handleChat();
-      });
-    });
   };
 
   const appendFAQ = (questions) => {
@@ -159,7 +125,7 @@ const initChatbot = () => {
 
     chatbox.appendChild(faqDiv);
     chatbox.scrollTo(0, chatbox.scrollHeight);
-    saveState(); // Lưu lại ngay khi có FAQ mới
+    saveState();
   };
 
   const createChatLi = (message, className) => {
@@ -174,7 +140,6 @@ const initChatbot = () => {
     return chatLi;
   };
 
-  // Hàm generateResponse được sửa lại để nhận prompt trực tiếp (cho tính năng Resume)
   const generateResponse = async (chatElement, resumePrompt = null) => {
     const messageElement = chatElement ? chatElement.querySelector("p") : null;
 
@@ -240,11 +205,7 @@ const initChatbot = () => {
       sendChatBtn.style.pointerEvents = "auto";
       chatInput.focus();
 
-      // Xóa cờ đang generate để không resume bậy bạ
-      localStorage.setItem("chat_is_generating", "false");
-      localStorage.removeItem("chat_last_prompt");
-
-      saveState(); // Lưu lại kết quả
+      saveState();
     }
   };
 
@@ -253,10 +214,8 @@ const initChatbot = () => {
     userMessage = chatInput.value.trim();
     if (!userMessage) return;
 
-    // 1. Bật trạng thái đang xử lý & Lưu prompt lại đề phòng chuyển trang
+    // 1. Bật trạng thái đang xử lý
     isGenerating = true;
-    localStorage.setItem("chat_is_generating", "true");
-    localStorage.setItem("chat_last_prompt", userMessage);
 
     sendChatBtn.style.opacity = "0.4";
     sendChatBtn.style.pointerEvents = "none";
@@ -272,7 +231,7 @@ const initChatbot = () => {
     chatbox.appendChild(createChatLi(userMessage, "outgoing"));
     chatbox.scrollTo(0, chatbox.scrollHeight);
 
-    saveState(); // Lưu HTML ngay lập tức
+    saveState();
 
     // Gọi Bot trả lời
     setTimeout(() => {

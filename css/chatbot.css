@@ -273,10 +273,10 @@ body.show-chatbot .chatbot {
   .chatbox .chat p {
     max-width: 80%;
   }
+}
 
-  .chatbot.no-transition {
-    transition: none !important;
-    opacity: 1 !important;
-    transform: scale(1) !important;
-  }
+.chatbot.no-transition {
+  transition: none !important;
+  opacity: 1 !important;
+  transform: scale(1) !important;
 }
