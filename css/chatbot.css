@@ -1,4 +1,6 @@
 /* css/chatbot.css */
+
+/* Nút mở Chatbot */
 .chatbot-toggler {
   position: fixed;
   bottom: 30px;
@@ -23,8 +25,9 @@
 body.show-chatbot .chatbot-toggler {
   transform: rotate(90deg);
 }
+/* Icon tự động đổi màu (Đen/Trắng) theo theme */
 .chatbot-toggler span {
-  color: #0f172a;
+  color: var(--btn-text);
   position: absolute;
   font-size: 1.2rem;
 }
@@ -36,13 +39,15 @@ body.show-chatbot .chatbot-toggler span:last-child {
   opacity: 1;
 }
 
+/* Khung Chatbot */
 .chatbot {
   position: fixed;
   right: 35px;
   bottom: 90px;
   width: 350px;
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid var(--glass-border);
+  height: 500px;
+  background: var(--chat-bg); /* Màu nền biến thiên */
+  border: 1px solid var(--chat-border);
   backdrop-filter: blur(15px);
   border-radius: 15px;
   overflow: hidden;
@@ -51,8 +56,10 @@ body.show-chatbot .chatbot-toggler span:last-child {
   transform: scale(0.5);
   transform-origin: bottom right;
   transition: all 0.1s ease;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
   z-index: 9998;
+  display: flex;
+  flex-direction: column; /* Xếp dọc các thành phần */
 }
 body.show-chatbot .chatbot {
   opacity: 1;
@@ -60,27 +67,32 @@ body.show-chatbot .chatbot {
   transform: scale(1);
 }
 
+/* Header */
 .chatbot header {
   padding: 16px 0;
-  position: relative;
   text-align: center;
   color: var(--neon-primary);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--chat-border);
   background: rgba(255, 255, 255, 0.02);
+  flex-shrink: 0;
+  position: relative;
 }
 .chatbot header span {
   position: absolute;
   right: 15px;
   top: 50%;
-  color: #fff;
+  color: var(--chat-text);
   transform: translateY(-50%);
   cursor: pointer;
   display: none;
 }
+
+/* Chatbox Area */
 .chatbot .chatbox {
+  flex: 1;
   overflow-y: auto;
-  height: 350px;
-  padding: 15px 20px 70px;
+  padding: 15px 20px;
+  background: var(--chat-bg);
 }
 .chatbot :where(.chatbox, textarea)::-webkit-scrollbar {
   width: 6px;
@@ -89,20 +101,20 @@ body.show-chatbot .chatbot {
   background: transparent;
 }
 .chatbot :where(.chatbox, textarea)::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(128, 128, 128, 0.3);
   border-radius: 25px;
 }
 
 .chatbox .chat {
   display: flex;
   list-style: none;
+  margin-bottom: 15px;
 }
 .chatbox .outgoing {
-  margin: 20px 0;
   justify-content: flex-end;
 }
 
-/* Style cho Avatar của Bot */
+/* Avatar */
 .chatbox .incoming .bot-avatar {
   width: 32px;
   height: 32px;
@@ -111,46 +123,47 @@ body.show-chatbot .chatbot {
   object-fit: cover;
   align-self: flex-end;
   border: 1px solid var(--neon-secondary);
-  background: #fff; /* Màu nền dự phòng nếu ảnh lỗi */
+  background: #fff;
 }
 
-/* Style chung cho tin nhắn */
+/* Tin nhắn */
 .chatbox .chat p {
   white-space: pre-wrap;
-  padding: 10px 14px; /* Đã giảm padding */
+  padding: 10px 14px;
   border-radius: 10px 10px 0 10px;
-  max-width: 80%; /* Tăng max-width lên 80% để chữ đỡ bị ngắt dòng xấu */
-  font-size: 0.9rem; /* Đã giảm cỡ chữ */
+  max-width: 85%;
+  font-size: 0.95rem;
   line-height: 1.4;
+  /* Căn trái để không bị rách chữ */
+  text-align: left;
+  word-wrap: break-word;
+  word-break: break-word;
   background: var(--neon-primary);
-  color: #0f172a;
-}
-.chatbox .incoming p {
-  border-radius: 10px 10px 10px 0;
-  background: rgba(255, 255, 255, 0.1);
-  color: #e2e8f0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff; /* Chữ bot luôn trắng để nổi trên nền xanh */
 }
 
-/* --- HIỆU ỨNG TYPING (BA CHẤM ĐỘNG) --- */
+.chatbox .incoming p {
+  border-radius: 10px 10px 10px 0;
+  background: var(--chat-incoming-bg); /* Màu nền tin nhắn khách biến thiên */
+  color: var(--chat-text); /* Màu chữ tin nhắn khách biến thiên */
+  border: 1px solid var(--chat-border);
+}
+
+/* Hiệu ứng Typing */
 .chatbox .incoming.typing p {
-  width: fit-content;
-  max-width: fit-content;
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 10px 14px;
+  width: fit-content;
 }
-
 .chatbox .incoming.typing p span {
   display: block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #e2e8f0;
+  background-color: var(--chat-text); /* Chấm nhảy màu theo theme */
   animation: bounce 0.8s infinite ease-in-out;
 }
-
 .chatbox .incoming.typing p span:nth-child(1) {
   animation-delay: 0s;
 }
@@ -160,7 +173,6 @@ body.show-chatbot .chatbot {
 .chatbox .incoming.typing p span:nth-child(3) {
   animation-delay: 0.4s;
 }
-
 @keyframes bounce {
   0%,
   100% {
@@ -170,17 +182,55 @@ body.show-chatbot .chatbot {
     transform: translateY(-5px);
   }
 }
-/* ------------------------------------- */
 
+/* FAQ Chips */
+.chatbox .faq-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 5px;
+  padding-left: 42px;
+  animation: fadeIn 0.5s ease;
+  justify-content: flex-start;
+}
+.suggestion-chip {
+  background: var(--chip-bg); /* Nền chip biến thiên */
+  border: 1px solid var(--neon-primary);
+  color: var(--neon-primary);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: 0.2s;
+  user-select: none;
+  white-space: nowrap;
+}
+.suggestion-chip:hover {
+  background: var(--neon-primary);
+  color: #fff;
+  transform: translateY(-2px);
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input Area */
 .chatbot .chat-input {
   display: flex;
   gap: 5px;
-  position: absolute;
-  bottom: 0;
   width: 100%;
-  background: rgba(15, 23, 42, 0.95);
+  background: var(--chat-input-bg); /* Nền input biến thiên */
   padding: 3px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--chat-border);
+  flex-shrink: 0;
+  position: relative;
 }
 .chat-input textarea {
   height: 55px;
@@ -190,9 +240,9 @@ body.show-chatbot .chatbot {
   resize: none;
   max-height: 180px;
   padding: 15px 15px 15px 0;
-  font-size: 0.9rem; /* Đồng bộ cỡ chữ input */
+  font-size: 0.9rem;
   background: transparent;
-  color: #fff;
+  color: var(--chat-text); /* Chữ nhập vào biến thiên (Đen/Trắng) */
 }
 .chat-input span {
   align-self: flex-end;
@@ -222,5 +272,11 @@ body.show-chatbot .chatbot {
   }
   .chatbox .chat p {
     max-width: 80%;
+  }
+
+  .chatbot.no-transition {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: scale(1) !important;
   }
 }

@@ -1,14 +1,50 @@
+/* css/style.css */
+
 /* =========================================================
-   1. CẤU HÌNH CHUNG & BIẾN MÀU SẮC
+   1. CẤU HÌNH MÀU SẮC (DARK/LIGHT MODE & CHATBOT)
    ========================================================= */
 :root {
-  --bg-color: #0f172a; /* Xanh đen đậm */
+  /* --- DARK MODE (Mặc định) --- */
+  --bg-color: #0f172a;
   --text-color: #e2e8f0; /* Trắng xám */
-  --neon-primary: #00e5ff; /* Xanh Cyan (Chủ đạo) */
-  --neon-secondary: #bb86fc; /* Tím (Phụ) */
+  --text-sub: #94a3b8; /* Xám nhạt */
+  --neon-primary: #00e5ff; /* Xanh Cyan Neon */
+  --neon-secondary: #bb86fc; /* Tím Neon */
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
   --footer-bg: #050914;
+  --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  --btn-text: #0f172a; /* Chữ nút Primary màu tối */
+
+  /* --- BIẾN MÀU CHO CHATBOT (DARK) --- */
+  --chat-bg: rgba(15, 23, 42, 0.95); /* Nền khung chat tối */
+  --chat-input-bg: rgba(15, 23, 42, 0.95); /* Nền ô nhập tối */
+  --chat-incoming-bg: rgba(255, 255, 255, 0.1); /* Nền tin nhắn khách */
+  --chat-text: #e2e8f0; /* Màu chữ trong chat */
+  --chat-border: rgba(255, 255, 255, 0.1); /* Viền mờ */
+  --chip-bg: rgba(255, 255, 255, 0.05); /* Nền nút FAQ */
+}
+
+/* --- LIGHT MODE (Tương phản cao) --- */
+body.light-mode {
+  --bg-color: #f3f6f9; /* Xám trắng nhẹ dễ chịu mắt */
+  --text-color: #1a202c; /* Đen xám đậm */
+  --text-sub: #4a5568; /* Xám đậm */
+  --neon-primary: #0077b6; /* Xanh biển đậm */
+  --neon-secondary: #7209b7; /* Tím đậm */
+  --glass-bg: rgba(255, 255, 255, 0.85); /* Kính đục trắng */
+  --glass-border: rgba(0, 0, 0, 0.1); /* Viền xám mỏng */
+  --footer-bg: #e2e8f0;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --btn-text: #ffffff; /* Chữ nút Primary màu trắng */
+
+  /* --- BIẾN MÀU CHO CHATBOT (LIGHT) --- */
+  --chat-bg: rgba(255, 255, 255, 0.95); /* Nền khung chat trắng */
+  --chat-input-bg: #ffffff; /* Nền ô nhập trắng tinh */
+  --chat-incoming-bg: rgba(0, 0, 0, 0.05); /* Nền tin nhắn khách xám nhạt */
+  --chat-text: #1a202c; /* Màu chữ đen */
+  --chat-border: rgba(0, 0, 0, 0.1); /* Viền xám nhạt */
+  --chip-bg: rgba(0, 0, 0, 0.05); /* Nền nút FAQ sáng */
 }
 
 * {
@@ -26,8 +62,10 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+}
 
-  /* Nền gradient nhẹ */
+/* Chỉ hiện gradient nền ở Dark Mode */
+body:not(.light-mode) {
   background-image: radial-gradient(
       circle at 10% 20%,
       rgba(187, 134, 252, 0.1) 0%,
@@ -40,7 +78,7 @@ body {
     );
 }
 
-/* --- Hiệu ứng Spotlight theo chuột --- */
+/* Hiệu ứng Spotlight (Ẩn khi ở Light mode) */
 .cursor-glow {
   position: fixed;
   top: 0;
@@ -56,16 +94,19 @@ body {
   );
   transition: opacity 0.3s;
 }
+body.light-mode .cursor-glow {
+  opacity: 0;
+}
 
 /* =========================================================
-   2. NAVIGATION BAR (THANH MENU)
+   2. NAVIGATION BAR
    ========================================================= */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 5%;
-  background: rgba(15, 23, 42, 0.9);
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
@@ -80,16 +121,14 @@ nav {
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
 }
 
-/* Menu PC */
 .nav-links {
   list-style: none;
   display: flex;
   gap: 30px;
+  align-items: center;
 }
-
 .nav-links a {
   color: var(--text-color);
   text-decoration: none;
@@ -98,8 +137,12 @@ nav {
   position: relative;
   transition: 0.3s;
 }
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--neon-primary);
+  font-weight: 700;
+}
 
-/* Gạch chân chạy khi hover */
 .nav-links a::after {
   content: "";
   position: absolute;
@@ -110,19 +153,11 @@ nav {
   background-color: var(--neon-primary);
   transition: width 0.3s;
 }
-
 .nav-links a:hover::after,
 .nav-links a.active::after {
   width: 100%;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--neon-primary);
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
-}
-
-/* Nút Hamburger (Ẩn trên PC) */
 .hamburger {
   display: none;
   cursor: pointer;
@@ -130,8 +165,26 @@ nav {
   color: var(--text-color);
 }
 
+.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+#theme-toggle {
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: 0.3s;
+  padding: 8px;
+  border-radius: 50%;
+}
+#theme-toggle:hover {
+  color: var(--neon-primary);
+  background: rgba(128, 128, 128, 0.1);
+}
+
 /* =========================================================
-   3. CONTAINER & LAYOUT
+   3. CONTAINER & CARDS
    ========================================================= */
 .container {
   flex: 1;
@@ -145,9 +198,6 @@ nav {
   flex-direction: column;
 }
 
-/* =========================================================
-   4. PROFILE CARD (TRANG CHỦ)
-   ========================================================= */
 .profile-card {
   background: var(--glass-bg);
   backdrop-filter: blur(15px);
@@ -157,19 +207,7 @@ nav {
   text-align: center;
   max-width: 450px;
   width: 100%;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  box-shadow: var(--card-shadow);
 }
 
 .avatar {
@@ -177,12 +215,13 @@ nav {
   height: 150px;
   border-radius: 50%;
   border: 3px solid var(--neon-primary);
-  box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
   margin-bottom: 20px;
   object-fit: cover;
   transition: transform 0.3s;
 }
-
+body:not(.light-mode) .avatar {
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
+}
 .avatar:hover {
   transform: scale(1.05) rotate(5deg);
 }
@@ -190,141 +229,104 @@ nav {
 .name {
   font-size: 2.2rem;
   margin-bottom: 5px;
-  background: linear-gradient(
-    90deg,
-    var(--neon-primary),
-    var(--neon-secondary)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   font-weight: 700;
+  color: var(--neon-primary);
 }
-
 .username {
-  color: #94a3b8;
+  color: var(--text-sub);
   font-size: 0.9rem;
   margin-bottom: 15px;
   display: block;
 }
-
 .bio {
-  color: #cbd5e1;
+  color: var(--text-color);
   margin-bottom: 30px;
   line-height: 1.6;
 }
 
 /* =========================================================
-   5. BUTTONS (NÚT BẤM NEON)
+   4. BUTTONS
    ========================================================= */
 .buttons {
   display: flex;
   gap: 15px;
   justify-content: center;
   margin-top: 20px;
-  flex-wrap: wrap; /* Để trên mobile không bị tràn */
+  flex-wrap: wrap;
 }
-
 .btn {
-  display: inline-flex; /* Canh giữa icon và chữ dễ hơn */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px; /* Khoảng cách giữa icon và chữ */
-  padding: 12px 35px; /* Nút to hơn một chút */
+  gap: 10px;
+  padding: 12px 35px;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 1px;
-  border-radius: 50px; /* Bo tròn hoàn toàn */
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 1;
+  border-radius: 50px;
+  transition: 0.3s;
   cursor: pointer;
-  border: 1px solid transparent; /* Viền mặc định */
+  border: 1px solid transparent;
 }
 
-/* --- Style cho nút Xem Chi Tiết (Màu Neon Xanh) --- */
 .btn-primary {
-  background: rgba(0, 229, 255, 0.1); /* Nền xanh mờ */
-  border-color: var(--neon-primary);
-  color: var(--neon-primary);
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
-}
-
-.btn-primary:hover {
   background: var(--neon-primary);
-  color: #0f172a; /* Chữ đen trên nền xanh */
-  box-shadow: 0 0 20px var(--neon-primary), 0 0 40px var(--neon-primary);
+  color: var(--btn-text);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.btn-primary:hover {
   transform: translateY(-3px);
-  font-weight: 700;
+  filter: brightness(1.1);
 }
 
-/* --- Style cho nút Phụ (Màu Neon Tím) - Dành cho nút Liên hệ --- */
 .btn-secondary {
-  background: transparent; /* Nền trong suốt */
-  border: 1px solid var(--neon-secondary); /* Viền tím */
-  color: var(--neon-secondary); /* Chữ tím */
-  box-shadow: 0 0 10px rgba(187, 134, 252, 0.2);
+  background: transparent;
+  border: 1px solid var(--neon-secondary);
+  color: var(--neon-secondary);
 }
-
 .btn-secondary:hover {
-  background: var(--neon-secondary); /* Hover vào thì nền tím */
-  color: #fff; /* Chữ trắng */
-  box-shadow: 0 0 20px var(--neon-secondary), 0 0 40px var(--neon-secondary);
+  background: var(--neon-secondary);
+  color: #fff;
   transform: translateY(-3px);
-  font-weight: 700;
-  border-color: var(--neon-secondary);
 }
 
-/* --- Style Riêng cho trang CONTACT (Màu thương hiệu) --- */
-
-/* 1. Facebook (Xanh dương) */
 .btn-fb {
-  background: rgba(24, 119, 242, 0.15);
+  background: rgba(24, 119, 242, 0.1);
   border-color: #1877f2;
   color: #1877f2;
 }
 .btn-fb:hover {
   background: #1877f2;
   color: white;
-  box-shadow: 0 0 20px rgba(24, 119, 242, 0.6);
   transform: translateY(-3px);
 }
 
-/* 2. GitHub (Trắng/Xám) */
 .btn-gh {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #e2e8f0;
-  color: #e2e8f0;
+  background: rgba(128, 128, 128, 0.1);
+  border-color: var(--text-color);
+  color: var(--text-color);
 }
 .btn-gh:hover {
-  background: #fff;
-  color: #000;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  background: var(--text-color);
+  color: var(--bg-color);
   transform: translateY(-3px);
 }
 
-/* 3. Email (Đỏ) */
 .btn-mail {
-  background: rgba(234, 67, 53, 0.15);
+  background: rgba(234, 67, 53, 0.1);
   border-color: #ea4335;
   color: #ea4335;
 }
 .btn-mail:hover {
   background: #ea4335;
   color: white;
-  box-shadow: 0 0 20px rgba(234, 67, 53, 0.6);
   transform: translateY(-3px);
 }
 
-/* Chỉnh lại nút trong thẻ Card dự án cho cân đối */
-.project-item .btn {
-  width: 100%;
-  margin-top: 15px;
-}
-
 /* =========================================================
-   6. PROJECT GRID (TRANG DỰ ÁN)
+   5. PROJECT GRID
    ========================================================= */
 .project-grid {
   display: grid;
@@ -332,7 +334,6 @@ nav {
   gap: 30px;
   width: 100%;
 }
-
 .project-item {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -341,240 +342,174 @@ nav {
   transition: 0.3s;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--card-shadow);
 }
-
 .project-item:hover {
   transform: translateY(-10px);
   border-color: var(--neon-primary);
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
 }
-
 .project-title {
   color: var(--neon-primary);
   font-size: 1.5rem;
   margin-bottom: 10px;
 }
 
+/* Căn đều text mô tả */
+.project-item p {
+  text-align: justify;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+/* Dàn thẻ tag đẹp hơn */
 .tech-stack {
   margin-bottom: 20px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
-
 .tech-stack span {
   font-size: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 4px 8px;
+  background: rgba(128, 128, 128, 0.15);
+  padding: 4px 10px;
   border-radius: 5px;
-  margin-right: 5px;
-  color: #e2e8f0;
+  color: var(--text-color);
+  font-weight: 500;
+  white-space: nowrap;
 }
-
 .project-item .btn {
-  margin-top: auto; /* Đẩy nút xuống đáy card */
-  text-align: center;
+  margin-top: auto;
   width: 100%;
 }
 
 /* =========================================================
-   7. FOOTER (MULTI-COLUMN)
+   6. FOOTER
    ========================================================= */
 footer {
   background: var(--footer-bg);
   border-top: 1px solid var(--glass-border);
   padding-top: 60px;
   margin-top: auto;
-  position: relative;
-  overflow: hidden;
 }
-
-footer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--neon-primary),
-    transparent
-  );
-  box-shadow: 0 0 20px var(--neon-primary);
-}
-
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 20px 40px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 40px;
-  padding-bottom: 40px;
 }
-
 .footer-col h4 {
   font-size: 18px;
   color: var(--neon-primary);
   margin-bottom: 25px;
-  font-weight: 600;
-  position: relative;
   text-transform: uppercase;
+  font-weight: 700;
   letter-spacing: 1px;
 }
-
-.footer-col h4::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -8px;
-  width: 30px;
-  height: 2px;
-  background-color: var(--neon-secondary);
-}
-
 .footer-logo {
   font-size: 28px;
   font-weight: bold;
-  color: #fff;
+  color: var(--text-color);
   text-decoration: none;
   display: block;
   margin-bottom: 15px;
-  text-shadow: 0 0 10px var(--neon-primary);
 }
-
 .footer-desc {
   font-size: 14px;
-  color: #94a3b8;
+  color: var(--text-sub);
   line-height: 1.6;
   margin-bottom: 20px;
 }
 
+/* List Footer */
 .footer-col ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 .footer-col ul li {
   margin-bottom: 12px;
 }
-
 .footer-col ul li a {
-  color: #cbd5e1;
+  color: var(--text-sub);
   text-decoration: none;
-  font-size: 14px;
   transition: 0.3s;
   display: inline-block;
 }
-
 .footer-col ul li a:hover {
   color: var(--neon-primary);
   transform: translateX(5px);
 }
 
-/* Liên hệ */
 .contact-info li {
-  color: #cbd5e1;
+  color: var(--text-sub);
   font-size: 14px;
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 10px;
 }
 .contact-info i {
   color: var(--neon-secondary);
+  width: 20px;
+  text-align: center;
 }
 
-/* Social Icons */
+/* Social Icons nằm ngang */
 .footer-socials {
   display: flex;
   gap: 15px;
+  margin-top: 20px;
 }
-
 .footer-socials a {
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(128, 128, 128, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  color: #fff;
+  color: var(--text-color);
   text-decoration: none;
   border: 1px solid var(--glass-border);
   transition: 0.3s;
 }
-
 .footer-socials a:hover {
   background: var(--neon-primary);
-  color: #000;
+  color: #fff;
   transform: translateY(-3px);
-  box-shadow: 0 0 15px var(--neon-primary);
 }
 
 .footer-bottom {
   text-align: center;
   padding: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: #02040a;
-  color: #64748b;
+  border-top: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-sub);
   font-size: 13px;
 }
 
-/* =========================================================
-   8. RESPONSIVE (MOBILE & TABLET)
-   ========================================================= */
 @media (max-width: 768px) {
   .hamburger {
     display: block;
   }
-
   .nav-links {
     position: fixed;
     top: 65px;
     right: -100%;
     width: 250px;
     height: calc(100vh - 65px);
-    background: rgba(15, 23, 42, 0.98);
-    backdrop-filter: blur(15px);
+    background: var(--bg-color);
+    border-left: 1px solid var(--glass-border);
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     padding-top: 50px;
     gap: 30px;
-    transition: 0.4s ease;
-    border-left: 1px solid var(--glass-border);
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    transition: 0.4s;
+    z-index: 999;
   }
-
-  /* Class này sẽ được JS thêm vào khi bấm menu */
   .nav-links.nav-active {
     right: 0;
-  }
-
-  .container {
-    padding: 20px;
-  }
-
-  .profile-card {
-    padding: 30px 20px;
-  }
-
-  /* Footer trên mobile canh giữa cho đẹp */
-  .footer-content,
-  .footer-container {
-    text-align: center;
-  }
-
-  .footer-col h4::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .footer-socials,
-  .contact-info li {
-    justify-content: center;
-  }
-
-  .buttons {
-    flex-direction: column; /* Nút xếp dọc trên mobile */
-    gap: 10px;
   }
 }

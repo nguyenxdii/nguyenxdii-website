@@ -6,6 +6,7 @@
     <title>Dự Án</title>
     <link rel="icon" type="image/x-icon" href="assets/images/favicon.png" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/chatbot.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -14,26 +15,25 @@
       href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/chatbot.css" />
   </head>
   <body>
-    <div class="cursor-glow"></div>
+    <script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        if (theme === "light") {
+          document.body.classList.add("light-mode");
+        }
+      })();
+    </script>
 
-    <nav>
-      <a href="index.html" class="logo">Dii.EXE</a>
-      <div class="hamburger"><i class="fa-solid fa-bars"></i></div>
-      <ul class="nav-links">
-        <li><a href="index.html">Trang chủ</a></li>
-        <li><a href="projects.html" class="active">Dự án</a></li>
-        <li><a href="contact.html">Liên hệ</a></li>
-      </ul>
-    </nav>
+    <div class="cursor-glow"></div>
+    <div id="nav-placeholder"></div>
 
     <div class="container">
       <div class="project-grid">
         <div class="project-item">
           <h3 class="project-title">Logistics App</h3>
-          <p style="margin-bottom: 15px; color: #ccc; font-size: 0.9rem">
+          <p style="margin-bottom: 15px; font-size: 0.9rem; opacity: 0.9">
             Hệ thống quản lý vận tải, theo dõi đơn hàng và điều phối tài xế. Tối
             ưu hóa quy trình kho bãi.
           </p>
@@ -43,7 +43,7 @@
 
         <div class="project-item">
           <h3 class="project-title">Stationery Shop</h3>
-          <p style="margin-bottom: 15px; color: #ccc; font-size: 0.9rem">
+          <p style="margin-bottom: 15px; font-size: 0.9rem; opacity: 0.9">
             Phần mềm quản lý bán hàng văn phòng phẩm, báo cáo doanh thu và quản
             lý tồn kho.
           </p>
@@ -53,7 +53,7 @@
 
         <div class="project-item">
           <h3 class="project-title">Portfolio Web</h3>
-          <p style="margin-bottom: 15px; color: #ccc; font-size: 0.9rem">
+          <p style="margin-bottom: 15px; font-size: 0.9rem; opacity: 0.9">
             Website cá nhân phong cách Neon Glassmorphism. Responsive và
             Interactive.
           </p>
@@ -67,8 +67,8 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="js/navbar.js"></script>
     <script src="js/footer.js"></script>
-
     <script src="js/script.js"></script>
     <script src="js/chatbot.js" defer></script>
   </body>
