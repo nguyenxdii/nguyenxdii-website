@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang Chủ | Dii Nguyễn</title>
+    <title>Trang Chủ</title>
+
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.png" />
+
     <link rel="stylesheet" href="css/style.css" />
     <link
       rel="stylesheet"
@@ -46,6 +49,45 @@
         </div>
       </div>
     </div>
+
+    <div class="chatbot-toggler">
+      <span class="material-symbols-rounded"
+        ><i class="fa-solid fa-message"></i
+      ></span>
+      <span class="material-symbols-rounded"
+        ><i class="fa-solid fa-xmark"></i
+      ></span>
+    </div>
+    <div class="chatbot">
+      <header>
+        <h2>Chat với Dii AI</h2>
+        <span class="close-btn"><i class="fa-solid fa-xmark"></i></span>
+      </header>
+      <ul class="chatbox">
+        <li class="chat incoming">
+          <span class="material-symbols-outlined"
+            ><i class="fa-solid fa-robot"></i
+          ></span>
+          <p>
+            Xin chào! Mình là trợ lý AI của Dii Nguyễn. Bạn muốn hỏi gì về kỹ
+            năng hay dự án của Dii không?
+          </p>
+        </li>
+      </ul>
+      <div class="chat-input">
+        <textarea
+          placeholder="Nhập câu hỏi..."
+          spellcheck="false"
+          required
+        ></textarea>
+        <span id="send-btn" class="material-symbols-rounded"
+          ><i class="fa-solid fa-paper-plane"></i
+        ></span>
+      </div>
+    </div>
+
+    <link rel="stylesheet" href="css/chatbot.css" />
+    <script src="js/chatbot.js" defer></script>
 
     <footer>
       <div class="footer-container">
