@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initModals();
   initMusicPlayer();
   initKeyboardNavigation();
-  initRainDebug(); // Debug: Alt + D toggle rain
+
   updateRoomVisuals(); // Cập nhật trạng thái hiển thị ban đầu (quan trọng để ẩn hitbox thừa)
 
   // Mobile Autoplay: Phát nhạc khi chạm lần đầu
@@ -308,22 +308,6 @@ function toggleLamp() {
   updateRoomVisuals();
 
   showToast(isLightMode ? "💡 Đèn bật!" : "🌙 Đèn tắt!");
-}
-
-// Debug: Alt + D toggle rain
-function initRainDebug() {
-  document.addEventListener("keydown", (e) => {
-    if (e.altKey && (e.key === "d" || e.key === "D")) {
-      e.preventDefault();
-      toggleRain();
-    }
-  });
-}
-
-function toggleRain() {
-  isRaining = !isRaining;
-  updateRoomVisuals();
-  showToast(isRaining ? "🌧️ Trời đang mưa..." : "🌤️ Trời đã tạnh!");
 }
 
 // Phát âm thanh mèo kêu

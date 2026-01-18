@@ -15,14 +15,18 @@ Một căn phòng ảo pixel art chill chill để flex với crush (mà chắc 
 
 ## ✨ Tính năng
 
-| Tính năng            | Mô tả                            | Độ useless |
-| -------------------- | -------------------------------- | ---------- |
-| 💡 Đèn bật/tắt       | Vì đêm thì tối, ngày thì sáng    | ⭐⭐⭐⭐⭐ |
-| 🎵 Nhạc nền          | Lofi beats to code/cry to        | ⭐⭐⭐     |
-| 🐱 Mèo kêu           | Click mèo, mèo kêu. Xong.        | ⭐⭐⭐⭐⭐ |
-| 🎮 Mini games        | Tetris + 2048 cho đỡ chán        | ⭐⭐       |
-| ⏰ Đồng hồ           | Nhắc bạn đã bao lâu rồi chưa ngủ | ⭐⭐⭐⭐   |
-| 🌙☀️ Auto dark/light | 6h sáng hay 6h tối? Tự phân xử   | ⭐⭐⭐     |
+| Tính năng            | Mô tả                                     | Độ useless |
+| -------------------- | ----------------------------------------- | ---------- |
+| 📝 Guestbook         | Để lại lưu bút cho tôi (hoặc spam emoji)  | ⭐         |
+| 👥 Visitor Counter   | Đếm người online + tổng lượt truy cập     | ⭐⭐       |
+| 🌧️ Weather Sync      | Sync thời tiết Sài Gòn real-time (có mưa) | ⭐⭐⭐     |
+| 🚫 Anti-Inspect      | Chặn F12, chuột phải (nhưng vẫn vào được) | ⭐⭐⭐⭐⭐ |
+| 💡 Đèn bật/tắt       | Vì đêm thì tối, ngày thì sáng             | ⭐⭐⭐⭐⭐ |
+| 🎵 Nhạc nền          | Lofi beats to code/cry to                 | ⭐⭐⭐     |
+| 🐱 Mèo kêu           | Click mèo, mèo kêu. Xong.                 | ⭐⭐⭐⭐⭐ |
+| 🎮 Mini games        | Tetris + 2048 cho đỡ chán                 | ⭐⭐       |
+| ⏰ Đồng hồ           | Nhắc bạn đã bao lâu rồi chưa ngủ          | ⭐⭐⭐⭐   |
+| 🌙☀️ Auto dark/light | 6h sáng hay 6h tối? Tự phân xử            | ⭐⭐⭐     |
 
 ## 🛠 Tech Stack
 
@@ -74,8 +78,10 @@ _Bạn đang xem trang web rồi, cần gì screenshot?_
 ## 👏 Credits
 
 - **Pixel Art Room**: Được tạo bởi **Gemini AI** 🤖✨
+- **Avatars**: [DiceBear](https://www.dicebear.com/) - Thư viện tạo avatar đa dạng
+- **Animated Icons**: [AnimateIcons](https://www.animateicons.com/) - Icon động đẹp mắt
 - **Nhạc Lofi**: Internet (vibes không tên)
-- **Code**: 50% não tôi, 50% Claude AI
+- **Code**: 50% não tôi, 50% AI
 - **Motivation**: Crush không rep tin nhắn nên rảnh quá làm web
 
 ## 📄 License
@@ -110,6 +116,3 @@ Nếu bạn thích project này, hãy:
   <br><br>
   <b>© 2024 Nguyexndii - All rights reserved (nhưng mà cũng free thôi)</b>
 </p>
-
-dicebear
-animateicons
