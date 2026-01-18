@@ -7,20 +7,15 @@
 (function () {
   "use strict";
 
-  // ========================================
-  // TOAST NOTIFICATION SYSTEM
-  // ========================================
   let toastTimeout = null;
 
   function showToast(message) {
-    // xóa toast cũ nếu có
     const existingToast = document.getElementById("anti-inspect-toast");
     if (existingToast) {
       existingToast.remove();
       clearTimeout(toastTimeout);
     }
 
-    // tạo toast mới
     const toast = document.createElement("div");
     toast.id = "anti-inspect-toast";
     toast.innerHTML = `<span style="margin-right: 8px;">🚫</span>${message}`;
@@ -48,13 +43,11 @@
 
     document.body.appendChild(toast);
 
-    // animation vào
     requestAnimationFrame(() => {
       toast.style.transform = "translateX(-50%) translateY(0)";
       toast.style.opacity = "1";
     });
 
-    // tự động ẩn sau 2 giây
     toastTimeout = setTimeout(() => {
       toast.style.transform = "translateX(-50%) translateY(100px)";
       toast.style.opacity = "0";
@@ -62,18 +55,12 @@
     }, 2000);
   }
 
-  // ========================================
-  // TOGGLE CHO VIỆC TEST (Phím D)
-  // ========================================
   let antiInspectEnabled = true;
 
-  // ========================================
-  // 1. chặn chuột phải (context menu)
-  // ========================================
+  // Block right-click
   document.addEventListener("contextmenu", function (e) {
     if (!antiInspectEnabled) return true;
     e.preventDefault();
-    // Detect mobile để hiện text phù hợp
     const isMobile =
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent,
@@ -84,23 +71,18 @@
     return false;
   });
 
-  // ========================================
-  // 2. chặn các phím tắt phổ biến
-  // ========================================
+  // Block keyboard shortcuts
   document.addEventListener("keydown", function (e) {
-    // Phím D - Toggle anti-inspect debug đã bị loại bỏ theo yêu cầu
-
-    // Nếu đã tắt anti-inspect thì không chặn gì
     if (!antiInspectEnabled) return;
 
-    // F12 - DevTools
+    // F12
     if (e.key === "F12" || e.keyCode === 123) {
       e.preventDefault();
       showToast("F12 đã bị vô hiệu hóa");
       return false;
     }
 
-    // Ctrl+Shift+I - DevTools
+    // Ctrl+Shift+I
     if (
       e.ctrlKey &&
       e.shiftKey &&
@@ -111,7 +93,7 @@
       return false;
     }
 
-    // Ctrl+Shift+J - Console
+    // Ctrl+Shift+J
     if (
       e.ctrlKey &&
       e.shiftKey &&
@@ -122,7 +104,7 @@
       return false;
     }
 
-    // Ctrl+Shift+C - Element picker
+    // Ctrl+Shift+C
     if (
       e.ctrlKey &&
       e.shiftKey &&
@@ -133,21 +115,21 @@
       return false;
     }
 
-    // Ctrl+U - View source
+    // Ctrl+U
     if (e.ctrlKey && (e.key === "U" || e.key === "u" || e.keyCode === 85)) {
       e.preventDefault();
       showToast("View source đã bị vô hiệu hóa");
       return false;
     }
 
-    // Ctrl+S - Save page
+    // Ctrl+S
     if (e.ctrlKey && (e.key === "S" || e.key === "s" || e.keyCode === 83)) {
       e.preventDefault();
       showToast("Lưu trang đã bị vô hiệu hóa");
       return false;
     }
 
-    // Ctrl+P - Print
+    // Ctrl+P
     if (e.ctrlKey && (e.key === "P" || e.key === "p" || e.keyCode === 80)) {
       e.preventDefault();
       showToast("In trang đã bị vô hiệu hóa");
@@ -155,17 +137,13 @@
     }
   });
 
-  // ========================================
-  // 3. chặn kéo thả (drag) hình ảnh và link
-  // ========================================
+  // Block drag
   document.addEventListener("dragstart", function (e) {
     e.preventDefault();
     return false;
   });
 
-  // ========================================
-  // 4. chặn chọn text (select) - KHÔNG hiện toast
-  // ========================================
+  // Block text selection
   document.addEventListener("selectstart", function (e) {
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
       return true;
@@ -174,9 +152,7 @@
     return false;
   });
 
-  // ========================================
-  // 5. chặn copy (Ctrl+C) - KHÔNG hiện toast vì đã chặn ở keydown
-  // ========================================
+  // Block copy
   document.addEventListener("copy", function (e) {
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
       return true;
@@ -185,9 +161,7 @@
     return false;
   });
 
-  // ========================================
-  // 6. chặn cut (Ctrl+X)
-  // ========================================
+  // Block cut
   document.addEventListener("cut", function (e) {
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
       return true;
@@ -196,24 +170,12 @@
     return false;
   });
 
-  // ========================================
-  // 7. phát hiện DevTools mở (TẮT vì gây lỗi khi zoom)
-  // ========================================
-  // Lưu ý: Phương pháp kiểm tra kích thước cửa sổ bị tắt vì:
-  // - Zoom browser sẽ thay đổi innerWidth/innerHeight
-  // - Gây hiểu nhầm là DevTools đang mở
-  // Các phím tắt và chuột phải vẫn được chặn ở trên
-
-  // ========================================
-  // 8. chống iframe embedding
-  // ========================================
+  // Prevent iframe embedding
   if (window.top !== window.self) {
     window.top.location = window.self.location;
   }
 
-  // ========================================
-  // 9. css bổ sung để chặn select và drag
-  // ========================================
+  // CSS to block selection & drag
   const style = document.createElement("style");
   style.textContent = `
     * {
@@ -239,13 +201,42 @@
   `;
   document.head.appendChild(style);
 
-  // ========================================
-  // 10. log cảnh báo trong console
-  // ========================================
-  console.log("%cCẢNH BÁO!", "color: red; font-size: 50px; font-weight: bold;");
-  console.log("%cĐây là tính năng dành cho developer.", "font-size: 18px;");
+  // Console messages
   console.log(
-    "%cNếu ai đó yêu cầu bạn paste code ở đây, đó có thể là lừa đảo!",
-    "font-size: 18px; color: red;",
+    "%cHi! :)",
+    "font-size: 16px; color: #a855f7; font-weight: bold; font-family: 'Courier New', monospace;",
+  );
+  console.log(
+    "%cFeel free to explore my code, but please ask before copying! 😊",
+    "font-size: 13px; color: #ccc; font-family: 'Courier New', monospace;",
+  );
+  console.log("\n");
+  console.log(
+    "%c My code is available on GitHub:",
+    "font-size: 13px; color: #60a5fa; font-weight: bold; font-family: 'Courier New', monospace;",
+  );
+  console.log(
+    "%c   https://github.com/nguyenxdii/nguyenxdii-website",
+    "font-size: 13px; color: #60a5fa; font-family: 'Courier New', monospace;",
+  );
+
+  console.log("\n\n\n");
+
+  console.log(
+    "%c Hế lô! :)",
+    "font-size: 16px; color: #a855f7; font-weight: bold; font-family: 'Courier New', monospace;",
+  );
+  console.log(
+    "%c Thoải mái xem code nhé, nhưng nhớ hỏi trước khi copy nha! 😊",
+    "font-size: 13px; color: #ccc; font-family: 'Courier New', monospace;",
+  );
+  console.log("\n");
+  console.log(
+    "%c Mã nguồn có sẵn trên GitHub:",
+    "font-size: 13px; color: #60a5fa; font-weight: bold; font-family: 'Courier New', monospace;",
+  );
+  console.log(
+    "%c   https://github.com/nguyenxdii/nguyenxdii-website",
+    "font-size: 13px; color: #60a5fa; font-family: 'Courier New', monospace;",
   );
 })();

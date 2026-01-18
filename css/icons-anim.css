@@ -1,0 +1,491 @@
+/* ANIMATED ICONS (Framer Motion Simulation) */
+
+/* =========================================
+   MOVE LEFT (BACK) ICON
+   ========================================= */
+.move-left-icon-animated {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  vertical-align: middle;
+}
+
+.move-left-svg {
+  transition: transform 0.3s ease;
+}
+
+/* Arrow path - moves left on hover */
+.move-left-arrow {
+  transition: transform 0.6s ease-in-out;
+}
+
+/* Line path - opacity pulse on hover */
+.move-left-line {
+  transition: stroke-opacity 0.8s ease;
+}
+
+/* Hover animations */
+.back-btn:hover .move-left-arrow,
+.menu-footer:hover .move-left-arrow,
+#back-to-menu-btn:hover .move-left-arrow {
+  animation: arrow-move-left 0.6s ease-in-out;
+}
+
+.back-btn:hover .move-left-line,
+.menu-footer:hover .move-left-line,
+#back-to-menu-btn:hover .move-left-line {
+  animation: line-pulse 0.8s ease;
+}
+
+@keyframes arrow-move-left {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes line-pulse {
+  0% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.5;
+  }
+  100% {
+    stroke-opacity: 1;
+  }
+}
+
+/* =========================================
+   GENERIC ICON STYLES
+   ========================================= */
+.icon-animated {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.icon-svg {
+  transition: transform 0.3s ease;
+  transform-origin: center;
+}
+
+/* =========================================
+   GITHUB ICON
+   ========================================= */
+.github-icon-animated {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.contact-link:hover .github-svg {
+  animation: svg-scale 1s ease;
+}
+
+@keyframes svg-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.github-body {
+  opacity: 1;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  transition: all 0.3s ease;
+}
+
+.contact-link:hover .github-body {
+  animation: body-draw 1s ease forwards;
+}
+
+@keyframes body-draw {
+  0% {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  33% {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 40;
+    opacity: 0.7;
+  }
+  100% {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.github-hand {
+  transform-origin: 90% 50%;
+  transition: transform 0.3s ease;
+}
+
+.contact-link:hover .github-hand {
+  animation: hand-wave 1s ease infinite;
+}
+
+@keyframes hand-wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(20deg);
+  }
+  75% {
+    transform: rotate(-15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* =========================================
+   FACEBOOK ICON
+   ========================================= */
+.facebook-icon-animated {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+/* SVG Animation: Scale + Rotate */
+.contact-link:hover .facebook-svg {
+  animation: fb-pop-shake 0.9s ease-out forwards;
+}
+
+@keyframes fb-pop-shake {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.15) rotate(-4deg);
+  }
+  75% {
+    transform: scale(0.92) rotate(4deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Path Animation: Draw Line */
+.facebook-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  opacity: 1;
+}
+
+.contact-link:hover .facebook-path {
+  animation: fb-path-draw 0.8s ease-in-out forwards;
+}
+
+@keyframes fb-path-draw {
+  0% {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  25% {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 80;
+    opacity: 0.4;
+  } /* 0.2 pathLength, reduced opacity */
+  100% {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   MAIL ICON
+   ========================================= */
+.mail-icon-animated {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  perspective: 1000px; /* Enable 3D rotation visibility */
+  flex-shrink: 0;
+}
+
+.mail-svg {
+  transform-style: preserve-3d; /* Crucial for child 3D transforms */
+}
+
+/* Container Scale */
+.contact-link:hover .mail-svg {
+  animation: mail-pop 0.36s ease-out;
+}
+
+@keyframes mail-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Flap Animation */
+.mail-flap {
+  transform-origin: 12px 6px;
+  transform-box: view-box; /* Crucial for SVG transform origin: 12px 6px in 24x24 box */
+  transition: transform 0.45s ease;
+}
+
+.contact-link:hover .mail-flap {
+  animation: mail-flap-wave 0.45s ease-out;
+}
+
+@keyframes mail-flap-wave {
+  0% {
+    transform: rotateX(0deg) translateY(0);
+  }
+  50% {
+    transform: rotateX(-12deg) translateY(-1.6px);
+  } /* Peak */
+  85% {
+    transform: rotateX(2deg) translateY(0.6px);
+  } /* Rebound */
+  100% {
+    transform: rotateX(0deg) translateY(0);
+  }
+}
+
+/* Body Animation */
+.mail-body {
+  transition: opacity 0.45s ease;
+}
+
+@keyframes mail-body-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   SEND ICON (Paper Plane)
+   ========================================= */
+.send-icon-animated {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  vertical-align: middle;
+}
+
+/* Main Plane Animation: Rotate, Move, Scale */
+.btn-submit:hover .send-svg,
+.send-icon-animated:hover .send-svg {
+  animation: send-fly 1.2s ease-in-out;
+}
+
+@keyframes send-fly {
+  0% {
+    transform: rotate(0deg) translate(0, 0) scale(1);
+  }
+  25% {
+    transform: rotate(-5deg) translate(4px, -2px) scale(1.04);
+  }
+  66% {
+    transform: rotate(2deg) translate(-1px, 0) scale(1);
+  }
+  100% {
+    transform: rotate(0deg) translate(0, 0) scale(1);
+  }
+}
+
+/* Trail Effect */
+.send-trail {
+  opacity: 0;
+  transform-origin: right center; /* originX: 1 */
+  transform-box: fill-box;
+}
+
+.btn-submit:hover .send-trail,
+.send-icon-animated:hover .send-trail {
+  animation: send-trail-dash 0.6s ease-out 0.05s; /* 0.5s duration + 0.05s delay */
+}
+
+@keyframes send-trail-dash {
+  0% {
+    opacity: 0;
+    transform: translateX(0) scaleX(1);
+  }
+  20% {
+    opacity: 0.5;
+    transform: translateX(-4px) scaleX(0.8);
+  }
+  50% {
+    opacity: 0;
+    transform: translateX(-8px) scaleX(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-8px) scaleX(1.1);
+  }
+}
+
+/* =========================================
+   CONTACT ITEM LAYOUT & COPY BUTTON
+   ========================================= */
+
+/* Contact Item Layout */
+.contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  background: #2a2a2a; /* Dark background to match image */
+  border-radius: 8px;
+  padding-right: 8px; /* Space for copy button */
+  border: 1px solid #333; /* Slight border */
+  transition: all 0.2s;
+}
+
+.contact-item:hover {
+  background: #333;
+  border-color: #444;
+}
+
+.contact-link {
+  flex-grow: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0; /* No gap - icon and text seamless */
+  text-decoration: none;
+  color: #eee; /* Light text */
+  padding: 12px; /* Inner padding */
+  border-radius: 8px 0 0 8px;
+}
+
+.contact-link span {
+  margin-left: 8px; /* Small margin for text after icon */
+}
+
+.contact-link:hover {
+  background: none; /* Remove hover from link itself */
+}
+
+/* Make sure the copy button looks integrated */
+.copy-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #444;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 6px;
+  color: #ccc;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  transition: all 0.2s ease;
+  position: relative;
+  height: 36px;
+  width: 36px;
+}
+
+.copy-btn:hover {
+  transform: scale(1.05); /* Slight scale */
+  background: #444;
+  color: #22c55e;
+  border-color: #22c55e;
+}
+
+/* Base Icon Container for Copy */
+.icon-container {
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+
+/* Hide Check Icon Initially */
+.check-icon {
+  display: none;
+  color: #22c55e;
+}
+
+/* Toggle Logic */
+.copy-btn.copied .copy-icon {
+  display: none;
+}
+
+.copy-btn.copied .check-icon {
+  display: inline-block;
+  animation: check-scale-in 0.3s ease-out;
+}
+
+@keyframes check-scale-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.check-path {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+}
+
+.copy-btn.copied .check-path {
+  animation: check-draw 0.6s ease-in-out forwards;
+}
+
+@keyframes check-draw {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Copy Icon Hover Animation */
+.copy-icon .copy-rect-back {
+  transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.copy-btn:hover .copy-rect-back {
+  transform: translate(-3px, -3px) rotate(360deg);
+}
+
+.copy-icon .copy-path-front {
+  transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.copy-btn:hover .copy-path-front {
+  transform: translate(3px, 3px);
+}

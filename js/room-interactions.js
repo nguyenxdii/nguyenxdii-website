@@ -2,6 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   initTimeBasedMode(); // Tự động set sáng/tối theo giờ thực
+  initRealtimeWeather(); // Sync thời tiết thật (Sài Gòn)
   initRealtimeClock(); // Đồng hồ real-time
   initPolygonHotspots();
   initModals();
@@ -45,6 +46,89 @@ function initTimeBasedMode() {
 
   // Chỉ sync biến isLightMode với state hiện tại (DOM đã được set rồi)
   isLightMode = isDaytime;
+}
+
+// ------------------------------------------------
+// REAL-TIME WEATHER (Open-Meteo API)
+// Location: District 1, Ho Chi Minh City
+// Latitude: 10.7769, Longitude: 106.7009
+// ------------------------------------------------
+async function initRealtimeWeather() {
+  const API_URL =
+    "https://api.open-meteo.com/v1/forecast?latitude=10.7769&longitude=106.7009&current=weather_code,temperature_2m&timezone=Asia%2FBangkok";
+
+  async function fetchWeather() {
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+
+      if (data && data.current) {
+        const code = data.current.weather_code;
+        const temp = Math.round(data.current.temperature_2m);
+
+        // WMO Weather Codes mapping
+        let startIcon = "☀️";
+        let description = "Trời quang";
+        let isRainy = false;
+
+        // Map codes
+        if (code === 0) {
+          startIcon = "☀️";
+          description = "Trời quang";
+        } else if (code >= 1 && code <= 3) {
+          startIcon = "⛅";
+          description = "Có mây";
+        } else if (code === 45 || code === 48) {
+          startIcon = "🌫️";
+          description = "Sương mù";
+        } else if (code >= 51 && code <= 55) {
+          startIcon = "🌧️";
+          description = "Mưa phùn";
+          isRainy = true;
+        } else if (code >= 61 && code <= 65) {
+          startIcon = "🌧️";
+          description = "Mưa rào";
+          isRainy = true;
+        } else if ((code >= 80 && code <= 82) || (code >= 66 && code <= 67)) {
+          startIcon = "⛈️";
+          description = "Mưa lớn";
+          isRainy = true;
+        } else if (code >= 95 && code <= 99) {
+          startIcon = "⛈️";
+          description = "Dông bão";
+          isRainy = true;
+        }
+
+        // Update Text Display
+        const weatherStatus = document.getElementById("weather-status");
+        if (weatherStatus) {
+          weatherStatus.textContent = `${temp}°C ${startIcon} ${description}`;
+        }
+
+        // Sync Rain State
+        if (isRaining !== isRainy) {
+          isRaining = isRainy;
+          updateRoomVisuals();
+
+          if (isRaining) {
+            showToast(`Sài Gòn đang mưa (${temp}°C)...`);
+          }
+        }
+
+        // console.log(`Weather: ${temp}°C, ${description} (Code: ${code})`);
+      }
+    } catch (error) {
+      console.error("Failed to fetch weather:", error);
+      const weatherStatus = document.getElementById("weather-status");
+      if (weatherStatus) weatherStatus.textContent = "N/A";
+    }
+  }
+
+  // Fetch immediately on load
+  fetchWeather();
+
+  // Fetch every 10 minutes (600,000 ms)
+  setInterval(fetchWeather, 600000);
 }
 
 // Đồng hồ real-time
@@ -169,16 +253,45 @@ function updateRoomVisuals() {
     }
   }
 
-  // 3. Xử lý Mèo (Normal vs Rain)
+  // 3. Xử lý Mèo (Refined Logic)
+  // Chỉ hiện mèo trên mái nhà (cat-rain) khi TRỜI TỐI và CÓ MƯA.
   const catNormal = document.querySelectorAll(".cat-normal");
   const catRain = document.querySelectorAll(".cat-rain");
 
-  if (isRaining) {
-    catNormal.forEach((el) => (el.style.display = "none"));
-    catRain.forEach((el) => (el.style.display = "block"));
+  // Logic: Show Roof Cat ONLY if Night + Rain
+  const showRoofCat = !isLightMode && isRaining;
+
+  // console.log(
+  //   `[Cat Logic] Light: ${isLightMode}, Rain: ${isRaining} => Show Roof: ${showRoofCat}`,
+  // );
+  // console.log(
+  //   `[Cat Logic] Normal Nodes: ${catNormal.length}, Rain Nodes: ${catRain.length}`,
+  // );
+
+  if (showRoofCat) {
+    // Hide Inside Cat, Show Roof Cat
+    catNormal.forEach((el) => {
+      el.style.display = "none";
+      el.style.visibility = "hidden";
+      el.style.pointerEvents = "none"; // GUARANTEE no clicks
+    });
+    catRain.forEach((el) => {
+      el.style.display = "block";
+      el.style.visibility = "visible";
+      el.style.pointerEvents = "auto";
+    });
   } else {
-    catNormal.forEach((el) => (el.style.display = "block"));
-    catRain.forEach((el) => (el.style.display = "none"));
+    // Show Inside Cat, Hide Roof Cat
+    catNormal.forEach((el) => {
+      el.style.display = "block";
+      el.style.visibility = "visible";
+      el.style.pointerEvents = "auto";
+    });
+    catRain.forEach((el) => {
+      el.style.display = "none";
+      el.style.visibility = "hidden";
+      el.style.pointerEvents = "none"; // GUARANTEE no clicks
+    });
   }
 }
 
@@ -316,6 +429,15 @@ function initModals() {
 
 // Chuyển đổi giữa các Apps trong Monitor (Menu, Games, About)
 function openMonitorApp(appName) {
+  // Play sound
+  if (typeof gameSounds !== "undefined") {
+    gameSounds.playClick();
+  }
+
+  // Stop any running games when switching apps/menus
+  if (typeof destroyTetrisGame === "function") destroyTetrisGame();
+  if (typeof destroyGame2048 === "function") destroyGame2048();
+
   const mainMenu = document.getElementById("game-menu");
   const gamesSubmenu = document.getElementById("games-submenu");
   const aboutApp = document.getElementById("app-about");
@@ -355,8 +477,25 @@ function openModal(modalId) {
   // Ẩn tất cả modal trước
   modals.forEach((modal) => (modal.style.display = "none"));
 
+  // Đóng popup ghi chú nếu đang mở
+  const writePopup = document.getElementById("write-popup-overlay");
+  if (writePopup) {
+    writePopup.classList.remove("active");
+  }
+
   // Hiển thị modal được chọn
-  targetModal.style.display = "block";
+  if (modalId === "modal-guestbook") {
+    targetModal.style.display = "flex";
+    // Show floating write button only for guestbook
+    const floatingBtn = document.getElementById("floating-write-btn");
+    if (floatingBtn) floatingBtn.style.display = "flex";
+  } else {
+    targetModal.style.display = "block";
+    // Hide floating write button for other modals
+    const floatingBtn = document.getElementById("floating-write-btn");
+    if (floatingBtn) floatingBtn.style.display = "none";
+  }
+
   overlay.classList.add("active");
 
   // Ngăn cuộn trang
@@ -390,6 +529,11 @@ function initGameForDevice() {
 
 // Chuyển đổi game
 window.switchGame = function (gameName) {
+  // Play sound
+  if (typeof gameSounds !== "undefined") {
+    gameSounds.playClick();
+  }
+
   // Hide Submenu instead of Main Menu (since Main Menu is already hidden)
   const submenu = document.getElementById("games-submenu");
   const displayArea = document.getElementById("game-display-area");
@@ -453,6 +597,12 @@ function closeAllModals() {
   overlay?.classList.remove("active");
   document.body.style.overflow = "";
 
+  // Đóng popup ghi chú nếu đang mở
+  const writePopup = document.getElementById("write-popup-overlay");
+  if (writePopup) {
+    writePopup.classList.remove("active");
+  }
+
   // Reset nhạc về âm lượng thường
   restoreMusicVolume();
 
@@ -506,6 +656,15 @@ function smoothVolumeTransition(audioElement, targetVolume) {
 // Điều hướng bằng phím tắt
 function initKeyboardNavigation() {
   document.addEventListener("keydown", (e) => {
+    // Không kích hoạt phím tắt khi đang nhập liệu
+    const activeTag = document.activeElement.tagName;
+    if (activeTag === "INPUT" || activeTag === "TEXTAREA") {
+      if (e.key === "Escape") {
+        closeAllModals(); // Vẫn cho phép ESC để đóng modal/focus
+      }
+      return;
+    }
+
     // ESC để đóng modal
     if (e.key === "Escape") {
       closeAllModals();
@@ -565,3 +724,24 @@ function showToast(message) {
     setTimeout(() => toast.remove(), 300);
   }, 2500);
 }
+
+// Copy to Clipboard Logic
+window.copyToClipboard = function (text, btnElement) {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      // Add 'copied' class to trigger CSS animations (Check icon shows)
+      btnElement.classList.add("copied");
+
+      // Remove 'copied' class after 2 seconds to revert to Copy icon
+      setTimeout(() => {
+        btnElement.classList.remove("copied");
+      }, 2000);
+
+      showToast("Đã sao chép vào bộ nhớ tạm!");
+    })
+    .catch((err) => {
+      console.error("Copy failed:", err);
+      showToast("Sao chép thất bại!");
+    });
+};

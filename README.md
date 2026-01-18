@@ -112,3 +112,4 @@ Nếu bạn thích project này, hãy:
 </p>
 
 dicebear
+animateicons

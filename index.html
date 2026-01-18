@@ -26,6 +26,12 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/virtual-room.css" />
+    <link rel="stylesheet" href="css/guestbook.css" />
+    <link rel="stylesheet" href="css/icons-anim.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+    />
 
     <!-- Pre-set dark/light mode BEFORE body renders to avoid flash -->
     <script>
@@ -55,6 +61,7 @@
     <!-- Real-time Clock -->
     <div class="realtime-clock" id="realtime-clock">
       <span class="clock-time" id="clock-time">00:00:00</span>
+      <span class="weather-status" id="weather-status">dang tai...</span>
     </div>
 
     <!-- Audio Elements -->
@@ -170,10 +177,10 @@
           data-modal="modal-library"
           points="923,342,434,206,429,1534,510,1532,904,1268"
         />
-        <!-- Bảng ghi chú (notebook/about) -->
+        <!-- Bảng ghi chú (Guestbook) -->
         <polygon
           class="hotspot-polygon"
-          data-modal=""
+          data-modal="modal-guestbook"
           points="1022,361,1019,619,1409,612,1403,358"
         />
         <!-- Màn hình (monitor/projects) -->
@@ -194,17 +201,17 @@
           data-action="music"
           points="1746,925,1916,923,1918,1040,1741,1043"
         />
-        <!-- Con mèo (cat) - Normal -->
-        <polygon
-          class="hotspot-polygon cat-normal"
-          data-action="cat"
-          points="1401,1356,1406,1424,1464,1430,1521,1414,1552,1435,1597,1406,1584,1356,1532,1335"
-        />
         <!-- Con mèo (cat) - Rain (Dark) -->
         <polygon
           class="hotspot-polygon cat-rain"
           data-action="cat"
           points="2292,1058,2305,1147,2385,1158,2440,1137,2496,1166,2559,1126,2554,1076,2520,1031,2459,1023,2379,1036"
+        />
+        <!-- Con mèo (cat) - Normal (Inside) for Dark Mode (No Rain) -->
+        <polygon
+          class="hotspot-polygon cat-normal"
+          data-action="cat"
+          points="1398,1356,1401,1432,1503,1424,1552,1435,1599,1409,1579,1362,1537,1338"
         />
       </svg>
 
@@ -241,14 +248,14 @@
         />
         <!-- Con mèo (cat) -->
         <polygon
-          class="hotspot-polygon"
+          class="hotspot-polygon cat-normal"
           data-action="cat"
           points="1398,1356,1401,1432,1503,1424,1552,1435,1599,1409,1579,1362,1537,1338"
         />
-        <!-- Ghi chú (notebook/about) -->
+        <!-- Ghi chú (notebook/guestbook) -->
         <polygon
           class="hotspot-polygon"
-          data-modal=""
+          data-modal="modal-guestbook"
           points="1017,366,1022,619,1406,619,1406,358"
         />
         <!-- Kệ sách (bookshelf) -->
@@ -297,14 +304,6 @@
           <div class="nav-text">
             <h4>My Projects</h4>
             <p>Các dự án lập trình</p>
-          </div>
-        </div>
-
-        <div class="mobile-nav-item" data-modal="modal-about">
-          <span class="nav-icon">📝</span>
-          <div class="nav-text">
-            <h4>About Me</h4>
-            <p>Giới thiệu bản thân</p>
           </div>
         </div>
 
@@ -410,7 +409,24 @@
                     onclick="openMonitorApp('menu')"
                     style="cursor: pointer; animation: none; color: #aaa"
                   >
-                    <i class="fas fa-arrow-left"></i> BACK
+                    <div class="move-left-icon-animated">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="move-left-svg"
+                      >
+                        <path d="M6 8L2 12L6 16" class="move-left-arrow" />
+                        <path d="M2 12H22" class="move-left-line" />
+                      </svg>
+                    </div>
+                    BACK
                   </div>
                 </div>
 
@@ -421,7 +437,24 @@
                   style="display: none"
                 >
                   <button class="back-btn" onclick="openMonitorApp('menu')">
-                    <i class="fas fa-arrow-left"></i> BACK
+                    <div class="move-left-icon-animated">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="move-left-svg"
+                      >
+                        <path d="M6 8L2 12L6 16" class="move-left-arrow" />
+                        <path d="M2 12H22" class="move-left-line" />
+                      </svg>
+                    </div>
+                    BACK
                   </button>
                   <div class="app-scroll-content">
                     <div class="terminal-header">
@@ -461,7 +494,24 @@
                     id="back-to-menu-btn"
                     onclick="openMonitorApp('games')"
                   >
-                    <i class="fas fa-arrow-left"></i> BACK
+                    <div class="move-left-icon-animated">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="move-left-svg"
+                      >
+                        <path d="M6 8L2 12L6 16" class="move-left-arrow" />
+                        <path d="M2 12H22" class="move-left-line" />
+                      </svg>
+                    </div>
+                    BACK
                   </button>
                   <div id="tetris-container"></div>
                   <div id="game2048-container" style="display: none"></div>
@@ -486,7 +536,59 @@
         <button class="modal-close-monitor">&times;</button>
       </div>
 
-      <!-- About Me -->
+      <!-- 📝 GUESTBOOK MODAL -->
+      <div class="modal" id="modal-guestbook" style="display: none">
+        <div class="modal-header">
+          <span class="decorative-screw-left"></span>
+          <div class="modal-title">
+            <span>Bảng Lưu Bút</span>
+          </div>
+          <button class="modal-close"></button>
+        </div>
+        <div class="modal-content guestbook-modal-content">
+          <!-- Floating Write Button -->
+          <button class="floating-write-btn" id="floating-write-btn">
+            <!-- Icon ✍️ Removed -->
+            <span class="btn-text">Viết Lưu Bút</span>
+          </button>
+
+          <!-- Scrollable Body - Messages Grid -->
+          <div class="guestbook-body">
+            <div class="guestbook-grid" id="guestbook-grid">
+              <!-- Messages will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 👤 ABOUT ME (PROFILE) MODAL -->
+      <div class="modal" id="modal-about" style="display: none">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span class="icon">👨‍💻</span>
+            <span>About Me</span>
+          </div>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-content">
+          <div class="about-section">
+            <h4>Hi!</h4>
+            <p>
+              Hé lô, mình là <strong>Nguyễn Duy</strong>! Dân AIT~~ 👋 Rất vui
+              được đón bạn ghé thăm căn phòng nhỏ của mình. Đây là nơi mình chia
+              sẻ những điều mình yêu thích và mày mò được. Hy vọng bạn sẽ tìm
+              thấy chút niềm vui ở đây nhé! ✨
+            </p>
+          </div>
+          <div class="about-section">
+            <h4>Hobbies</h4>
+            <p>
+              Những khi rảnh rỗi, mình thích leo rank game, xem YTB hoặc đơn
+              giản là chill cùng những bản nhạc Lofi.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <!-- 🎮 GAMING MODAL -->
       <div class="modal" id="modal-gaming" style="display: none">
@@ -526,27 +628,244 @@
           <button class="modal-close">&times;</button>
         </div>
         <div class="modal-content">
-          <div class="contact-grid">
-            <a
-              href="https://github.com/nguyenxdii"
-              target="_blank"
-              class="contact-link"
-            >
-              <i class="fab fa-github"></i>
-              <span>GitHub - nguyenxdii</span>
-            </a>
-            <a
-              href="https://www.facebook.com/nguyexndii"
-              target="_blank"
-              class="contact-link"
-            >
-              <i class="fab fa-facebook"></i>
-              <span>Facebook - nguyexndii</span>
-            </a>
-            <a href="mailto:nguyexndii.2003@gmail.com" class="contact-link">
-              <i class="fas fa-envelope"></i>
-              <span>Email - nguyexndii.2003@gmail.com</span>
-            </a>
+          <div class="contact-links">
+            <!-- GITHUB -->
+            <div class="contact-item">
+              <a
+                href="https://github.com/nguyenxdii"
+                target="_blank"
+                class="contact-link"
+              >
+                <div class="github-icon-animated">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="github-svg"
+                  >
+                    <path
+                      d="M15 22v-4a4.8 4.8 0 0 0-1-3.5 c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5 .28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5 -2.64-.5-5.36-.5-8 0 C6 2 5 2 5 2 c-.3 1.15-.3 2.35 0 3.5 A5.403 5.403 0 0 0 4 9 c0 3.5 3 5.5 6 5.5 -.39.49-.68 1.05-.85 1.65 -.17.6-.22 1.23-.15 1.85v4"
+                      class="github-body"
+                    />
+                    <path d="M9 18c-4.51 2-5-2-7-2" class="github-hand" />
+                  </svg>
+                </div>
+                <span>GitHub - nguyenxdii</span>
+              </a>
+              <button
+                class="copy-btn"
+                onclick="copyToClipboard('https://github.com/nguyenxdii', this)"
+              >
+                <!-- COPY ICON -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="copy-icon"
+                >
+                  <rect
+                    width="14"
+                    height="14"
+                    x="8"
+                    y="8"
+                    rx="2"
+                    ry="2"
+                    class="copy-rect-back"
+                  ></rect>
+                  <path
+                    d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                    class="copy-path-front"
+                  ></path>
+                </svg>
+                <!-- CHECK ICON (Hidden) -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="check-icon"
+                >
+                  <path d="M5 13l4 4L19 7" class="check-path"></path>
+                </svg>
+              </button>
+            </div>
+
+            <!-- FACEBOOK -->
+            <div class="contact-item">
+              <a
+                href="https://www.facebook.com/nguyexndii"
+                target="_blank"
+                class="contact-link"
+              >
+                <div class="facebook-icon-animated">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="facebook-svg"
+                  >
+                    <path
+                      d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7 a1 1 0 0 1 1-1h3z"
+                      class="facebook-path"
+                    />
+                  </svg>
+                </div>
+                <span>Facebook - nguyexndii</span>
+              </a>
+              <button
+                class="copy-btn"
+                onclick="
+                  copyToClipboard('https://www.facebook.com/nguyexndii', this)
+                "
+              >
+                <!-- COPY ICON -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="copy-icon"
+                >
+                  <rect
+                    width="14"
+                    height="14"
+                    x="8"
+                    y="8"
+                    rx="2"
+                    ry="2"
+                    class="copy-rect-back"
+                  ></rect>
+                  <path
+                    d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                    class="copy-path-front"
+                  ></path>
+                </svg>
+                <!-- CHECK ICON (Hidden) -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="check-icon"
+                >
+                  <path d="M5 13l4 4L19 7" class="check-path"></path>
+                </svg>
+              </button>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="contact-item">
+              <a href="mailto:nguyexndii.2003@gmail.com" class="contact-link">
+                <div class="mail-icon-animated">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="mail-svg"
+                  >
+                    <path
+                      d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"
+                      class="mail-flap"
+                    />
+                    <rect
+                      x="2"
+                      y="4"
+                      width="20"
+                      height="16"
+                      rx="2"
+                      class="mail-body"
+                    />
+                  </svg>
+                </div>
+                <span>Email - nguyexndii.2003@gmail.com</span>
+              </a>
+              <button
+                class="copy-btn"
+                onclick="copyToClipboard('nguyexndii.2003@gmail.com', this)"
+              >
+                <!-- COPY ICON -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="copy-icon"
+                >
+                  <rect
+                    width="14"
+                    height="14"
+                    x="8"
+                    y="8"
+                    rx="2"
+                    ry="2"
+                    class="copy-rect-back"
+                  ></rect>
+                  <path
+                    d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                    class="copy-path-front"
+                  ></path>
+                </svg>
+                <!-- CHECK ICON (Hidden) -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="check-icon"
+                >
+                  <path d="M5 13l4 4L19 7" class="check-path"></path>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -564,13 +883,82 @@
     </div>
 
     <!-- Scripts -->
+    <!-- ✍️ WRITE POPUP (Moved outside for better size/centering) -->
+    <div class="write-popup-overlay" id="write-popup-overlay">
+      <div class="write-popup">
+        <div class="popup-header">
+          <h3>Viết Lưu Bút</h3>
+          <button class="popup-close" id="popup-close">&times;</button>
+        </div>
+        <form id="guestbook-form" class="popup-form">
+          <div class="form-group">
+            <label for="guest-name">Tên của bạn:</label>
+            <input
+              type="text"
+              id="guest-name"
+              maxlength="15"
+              placeholder="Tối đa 15 ký tự"
+              required
+            />
+            <div class="char-counter"><span id="name-counter">0</span>/15</div>
+          </div>
+          <div class="form-group">
+            <label for="guest-message">Lời nhắn:</label>
+            <textarea
+              id="guest-message"
+              maxlength="200"
+              placeholder="Để lại dấu ấn của bạn... (Tối đa 200 ký tự)"
+              rows="5"
+              required
+            ></textarea>
+            <div class="char-counter">
+              <span id="message-counter">0</span>/200
+            </div>
+          </div>
+          <button type="submit" class="submit-btn btn-submit">
+            <div class="send-icon-animated">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="send-svg"
+              >
+                <path
+                  d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"
+                />
+                <path d="m21.854 2.147-10.94 10.939" />
+                <line
+                  x1="6"
+                  y1="12"
+                  x2="11"
+                  y2="12"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="send-trail"
+                />
+              </svg>
+            </div>
+            <span class="btn-text">GỬI LƯU BÚT</span>
+          </button>
+          <div id="form-error" class="form-error"></div>
+        </form>
+      </div>
+    </div>
+
     <script src="js/room-interactions.js"></script>
     <script src="js/game-sounds.js"></script>
     <script src="js/game-2048.js"></script>
     <script src="js/tetris-game.js"></script>
     <script src="js/rain-effect.js"></script>
-    <script src="js/anti-inspect.js"></script>
     <!-- Firebase Visitor Counter -->
     <script type="module" src="js/visitor-counter.js"></script>
+    <!-- Guestbook Feature -->
+    <script type="module" src="js/guestbook.js"></script>
   </body>
 </html>

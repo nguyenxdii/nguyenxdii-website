@@ -48,6 +48,11 @@ class GameSounds {
     oscillator.stop(this.audioContext.currentTime + duration);
   }
 
+  // Generic Click Sound
+  playClick() {
+    this.playBeep(800, 0.05, "sine");
+  }
+
   // 2048 Sounds
   playMove() {
     this.playBeep(200, 0.05, "sine");
