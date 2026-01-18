@@ -44,29 +44,33 @@ const guestbookRef = ref(db, "guestbook");
 // ================================================
 const badWords = [
   "đồ ngu",
-  "ngu",
   "đần",
   "khùng",
   "điên",
   "đéo",
   "đ.m",
   "dm",
-  "cc",
   "lồn",
   "cặc",
-  "vãi",
   "đ.i.t",
   "dit",
   "shit",
   "fuck",
-  "ass",
   "bitch",
-  // Add more bad words as needed
 ];
 
 function containsBadWords(text) {
   const lowerText = text.toLowerCase();
-  return badWords.some((word) => lowerText.includes(word.toLowerCase()));
+
+  // Check each bad word with word boundaries
+  return badWords.some((word) => {
+    // Create regex with word boundaries for whole word match
+    const regex = new RegExp(
+      `\\b${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
+      "i",
+    );
+    return regex.test(lowerText);
+  });
 }
 
 // ================================================
