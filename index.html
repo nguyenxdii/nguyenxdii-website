@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nguyexndii's Room</title>
+    <meta
+      name="description"
+      content="Không gian số của Nguyexndii - Interactive Virtual Room"
+    />
+    <link rel="icon" type="image/webp" href="assets/images/favicon.webp" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/virtual-room.css" />
+
+    <!-- Pre-set dark/light mode BEFORE body renders to avoid flash -->
+    <script>
+      (function () {
+        var hour = new Date().getHours();
+        var isDay = hour >= 6 && hour < 18;
+        // Store in sessionStorage so JS can read it later
+        sessionStorage.setItem("initialMode", isDay ? "light" : "dark");
+      })();
+    </script>
+
+    <!-- Anti-Inspect Script (chặn F12, chuột phải, DevTools) -->
+    <script src="js/anti-inspect.js"></script>
+  </head>
+
+  <body>
+    <!-- Scrolling Banner - Fun message -->
+    <div class="scroll-banner">
+      <div class="scroll-text">
+        Đây chỉ là một trang web làm khi rảnh háng
+        :3...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nếu bạn đang đọc dòng này thì
+        đã mất 10s cuộc đời rồi đấy~~~
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cheeseeeeeee~~~
+      </div>
+    </div>
+
+    <!-- Real-time Clock -->
+    <div class="realtime-clock" id="realtime-clock">
+      <span class="clock-time" id="clock-time">00:00:00</span>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="bg-music" loop>
+      <source src="assets/audio/music 1.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="cat-meow">
+      <source src="assets/audio/cat-meow.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="light-switch">
+      <source src="assets/audio/light-switch.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="pc-monitor-off">
+      <source src="assets/audio/pc-monitor-switch-off.mp3" type="audio/mpeg" />
+    </audio>
+
+    <!-- Mobile Warning (hiển thị trên mobile thay vì room) -->
+    <div class="mobile-warning-container" id="mobile-warning">
+      <div class="warning-content">
+        <div class="warning-icon">💻</div>
+        <h2>Vui lòng sử dụng máy tính</h2>
+        <p>
+          Để có trải nghiệm tốt nhất, hãy truy cập website này trên máy tính.
+        </p>
+        <p class="warning-sub">Tính năng mobile đang được phát triển...</p>
+      </div>
+    </div>
+
+    <!-- Room View (PC only) -->
+    <div class="room-container" id="room-container">
+      <!-- Inline script to set correct mode IMMEDIATELY before images load -->
+      <script>
+        (function () {
+          var hour = new Date().getHours();
+          var isDay = hour >= 6 && hour < 18;
+          var container = document.getElementById("room-container");
+          container.className =
+            "room-container " + (isDay ? "light-mode" : "dark-mode");
+        })();
+      </script>
+      <!-- Room Background Images -->
+      <img
+        src="assets/images/back-ground-dark.webp"
+        alt="Nguyexndii's Room Dark"
+        class="room-background room-bg-dark"
+        id="bg-dark"
+      />
+      <img
+        src="assets/images/back-ground-dark-rain.png"
+        alt="Nguyexndii's Room Dark Rain"
+        class="room-background room-bg-dark-rain"
+        id="bg-dark-rain"
+      />
+      <img
+        src="assets/images/back-ground-light.webp"
+        alt="Nguyexndii's Room Light"
+        class="room-background room-bg-light"
+        id="bg-light"
+      />
+      <img
+        src="assets/images/back-ground-light-rain.png"
+        alt="Nguyexndii's Room Light Rain"
+        class="room-background room-bg-light-rain"
+        id="bg-light-rain"
+      />
+
+      <!-- Rain Canvas (Window Effect) -->
+      <canvas id="rain-canvas" class="rain-canvas"></canvas>
+      <!-- Script to set correct active image -->
+      <script>
+        (function () {
+          var hour = new Date().getHours();
+          var isDay = hour >= 6 && hour < 18;
+          document
+            .getElementById(isDay ? "bg-light" : "bg-dark")
+            .classList.add("active");
+        })();
+      </script>
+
+      <!-- Ambient Light Effects (Dark mode only) -->
+      <div class="ambient-effects dark-effects" id="ambient-effects-dark">
+        <!-- String lights glow - 5 bóng đèn dây -->
+        <div class="string-light light-1"></div>
+        <div class="string-light light-2"></div>
+        <div class="string-light light-3"></div>
+        <div class="string-light light-4"></div>
+        <div class="string-light light-5"></div>
+        <!-- Lamp glow - ánh sáng tỏa ra từ đèn bàn -->
+        <div class="lamp-glow"></div>
+      </div>
+
+      <!-- Light mode effects - ánh sáng cửa sổ -->
+      <div class="ambient-effects light-effects" id="ambient-effects-light">
+        <div class="window-light"></div>
+      </div>
+
+      <!-- SVG Hotspot Overlay - Dark Mode -->
+      <svg
+        class="hotspot-svg hotspot-svg-dark"
+        id="hotspot-dark"
+        viewBox="0 0 2752 1536"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <!-- Đèn (lamp) - Toggle light/dark -->
+        <polygon
+          class="hotspot-polygon"
+          data-action="lamp"
+          points="1035,680,962,766,996,891,983,917,1066,917,1038,881,977,776,1030,713,1061,740,1092,737,1134,695,1124,672,1045,643"
+        />
+        <!-- Kệ sách (bookshelf) -->
+        <polygon
+          class="hotspot-polygon"
+          data-modal="modal-library"
+          points="923,342,434,206,429,1534,510,1532,904,1268"
+        />
+        <!-- Bảng ghi chú (notebook/about) -->
+        <polygon
+          class="hotspot-polygon"
+          data-modal=""
+          points="1022,361,1019,619,1409,612,1403,358"
+        />
+        <!-- Màn hình (monitor/projects) -->
+        <polygon
+          class="hotspot-polygon"
+          data-modal="modal-projects"
+          points="1166,708,1163,849,1406,849,1401,706"
+        />
+        <!-- Coffee (contact) -->
+        <polygon
+          class="hotspot-polygon"
+          data-modal="modal-contact"
+          points="1085,907,1079,860,1124,857,1116,904"
+        />
+        <!-- Băng đĩa (cassette/music) -->
+        <polygon
+          class="hotspot-polygon"
+          data-action="music"
+          points="1746,925,1916,923,1918,1040,1741,1043"
+        />
+        <!-- Con mèo (cat) - Normal -->
+        <polygon
+          class="hotspot-polygon cat-normal"
+          data-action="cat"
+          points="1401,1356,1406,1424,1464,1430,1521,1414,1552,1435,1597,1406,1584,1356,1532,1335"
+        />
+        <!-- Con mèo (cat) - Rain (Dark) -->
+        <polygon
+          class="hotspot-polygon cat-rain"
+          data-action="cat"
+          points="2292,1058,2305,1147,2385,1158,2440,1137,2496,1166,2559,1126,2554,1076,2520,1031,2459,1023,2379,1036"
+        />
+      </svg>
+
+      <!-- SVG Hotspot Overlay - Light Mode -->
+      <svg
+        class="hotspot-svg hotspot-svg-light"
+        id="hotspot-light"
+        viewBox="0 0 2752 1536"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <!-- Đèn (lamp) - Toggle light/dark -->
+        <polygon
+          class="hotspot-polygon"
+          data-action="lamp"
+          points="1035,669,959,776,1064,920,983,912,1001,883,964,784,1040,706,1058,742,1090,742,1132,700,1095,664,1048,640"
+        />
+        <!-- Coffee (contact) -->
+        <polygon
+          class="hotspot-polygon"
+          data-modal="modal-contact"
+          points="1079,865,1077,907,1119,907,1113,855"
+        />
+        <!-- Màn hình (monitor/projects) -->
+        <polygon
+          class="hotspot-polygon"
+          data-modal="modal-projects"
+          points="1166,708,1166,855,1401,855,1403,708"
+        />
+        <!-- Băng đĩa (cassette/music) -->
+        <polygon
+          class="hotspot-polygon"
+          data-action="music"
+          points="1741,920,1924,917,1926,1040,1743,1043"
+        />
+        <!-- Con mèo (cat) -->
+        <polygon
+          class="hotspot-polygon"
+          data-action="cat"
+          points="1398,1356,1401,1432,1503,1424,1552,1435,1599,1409,1579,1362,1537,1338"
+        />
+        <!-- Ghi chú (notebook/about) -->
+        <polygon
+          class="hotspot-polygon"
+          data-modal=""
+          points="1017,366,1022,619,1406,619,1406,358"
+        />
+        <!-- Kệ sách (bookshelf) -->
+        <polygon
+          class="hotspot-polygon"
+          data-modal="modal-library"
+          points="431,201,434,1534,499,1534,904,1270,907,345"
+        />
+      </svg>
+      <!-- Script to set correct hotspot active -->
+      <script>
+        (function () {
+          var hour = new Date().getHours();
+          var isDay = hour >= 6 && hour < 18;
+          document
+            .getElementById(isDay ? "hotspot-light" : "hotspot-dark")
+            .classList.add("active");
+        })();
+      </script>
+
+      <!-- Hint text for new visitors -->
+      <div class="room-hint" id="room-hint">
+        <span class="hint-icon">💡</span>
+        <span class="hint-text">Di chuột để khám phá căn phòng</span>
+      </div>
+    </div>
+
+    <!--  -->
+    <div class="mobile-menu">
+      <div class="mobile-header">
+        <h1>Nguyexndii</h1>
+        <p>Welcome to my digital room ✨</p>
+      </div>
+
+      <nav class="mobile-nav">
+        <div class="mobile-nav-item" data-modal="modal-library">
+          <span class="nav-icon">📚</span>
+          <div class="nav-text">
+            <h4>Light Novel Library</h4>
+            <p>Bộ sưu tập truyện dịch</p>
+          </div>
+        </div>
+
+        <div class="mobile-nav-item" data-modal="modal-projects">
+          <span class="nav-icon">💻</span>
+          <div class="nav-text">
+            <h4>My Projects</h4>
+            <p>Các dự án lập trình</p>
+          </div>
+        </div>
+
+        <div class="mobile-nav-item" data-modal="modal-about">
+          <span class="nav-icon">📝</span>
+          <div class="nav-text">
+            <h4>About Me</h4>
+            <p>Giới thiệu bản thân</p>
+          </div>
+        </div>
+
+        <div class="mobile-nav-item" data-modal="modal-gaming">
+          <span class="nav-icon">🎮</span>
+          <div class="nav-text">
+            <h4>Gaming Profile</h4>
+            <p>Valorant, Wuthering Waves</p>
+          </div>
+        </div>
+
+        <div class="mobile-nav-item" data-modal="modal-contact">
+          <span class="nav-icon">☕</span>
+          <div class="nav-text">
+            <h4>Contact Me</h4>
+            <p>Liên hệ với tôi</p>
+          </div>
+        </div>
+
+        <div class="mobile-nav-item" data-action="music">
+          <span class="nav-icon">🎵</span>
+          <div class="nav-text">
+            <h4>Toggle Music</h4>
+            <p>Lofi Hip Hop</p>
+          </div>
+        </div>
+
+        <div class="mobile-nav-item" data-action="lamp">
+          <span class="nav-icon">💡</span>
+          <div class="nav-text">
+            <h4>Toggle Lights</h4>
+            <p>Chế độ sáng/tối</p>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!--  -->
+    <div class="modal-overlay">
+      <!-- Light Novel Library -->
+      <div class="modal" id="modal-library" style="display: none">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span> Library</span>
+          </div>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-content">
+          <div class="about-section">
+            <p>Light novels will be updated here soon.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini Game (Tetris on PC, 2048 on Mobile) -->
+      <div class="modal modal-game" id="modal-projects" style="display: none">
+        <div class="modal-content">
+          <div class="monitor-wrapper">
+            <div class="monitor-bezel">
+              <!-- Đèn LED xanh góc trên phải -->
+              <div class="monitor-power-led top-led"></div>
+
+              <div class="monitor-screen">
+                <!-- MENU CHÍNH (DESKTOP) -->
+                <div id="game-menu" class="game-menu">
+                  <div class="menu-title">SYSTEM MENU</div>
+                  <div class="game-cards">
+                    <!-- About Me App -->
+                    <div
+                      class="menu-game-card"
+                      onclick="openMonitorApp('about')"
+                    >
+                      <div class="card-icon">📂</div>
+                      <div class="card-title">ABOUT ME</div>
+                    </div>
+                    <!-- Games Folder/App -->
+                    <div
+                      class="menu-game-card"
+                      onclick="openMonitorApp('games')"
+                    >
+                      <div class="card-icon">🎮</div>
+                      <div class="card-title">GAMES</div>
+                    </div>
+                  </div>
+                  <div class="menu-footer">READY</div>
+                </div>
+
+                <!-- MENU GAMES (SUB-MENU) -->
+                <div id="games-submenu" class="game-menu" style="display: none">
+                  <div class="menu-title">SELECT GAME</div>
+                  <div class="game-cards">
+                    <div class="menu-game-card" onclick="switchGame('tetris')">
+                      <div class="card-icon">🧱</div>
+                      <div class="card-title">TETRIS</div>
+                    </div>
+                    <div class="menu-game-card" onclick="switchGame('2048')">
+                      <div class="card-icon">🔢</div>
+                      <div class="card-title">2048</div>
+                    </div>
+                  </div>
+                  <div
+                    class="menu-footer"
+                    onclick="openMonitorApp('menu')"
+                    style="cursor: pointer; animation: none; color: #aaa"
+                  >
+                    <i class="fas fa-arrow-left"></i> BACK
+                  </div>
+                </div>
+
+                <!-- ABOUT ME APP DISPLAY -->
+                <div
+                  id="app-about"
+                  class="monitor-app-content"
+                  style="display: none"
+                >
+                  <button class="back-btn" onclick="openMonitorApp('menu')">
+                    <i class="fas fa-arrow-left"></i> BACK
+                  </button>
+                  <div class="app-scroll-content">
+                    <div class="terminal-header">
+                      <span class="term-user">root@nguyexndii:~$</span> cat
+                      about_me.txt
+                    </div>
+                    <div class="about-content-text">
+                      <p>
+                        Hé lô, mình là <strong>Nguyễn Duy</strong>! Dân AIT~~
+                        👋<br />
+                        Rất vui được đón bạn ghé thăm căn phòng nhỏ của mình.
+                        Đây là nơi mình chia sẻ những điều mình yêu thích và mày
+                        mò được. Hy vọng bạn sẽ tìm thấy chút niềm vui ở đây
+                        nhé! ✨
+                      </p>
+                      <br />
+                      <p class="section-title">> HOBBIES</p>
+                      <p>
+                        Những khi rảnh rỗi, mình thích leo rank game, xem YTB
+                        hoặc đơn giản là chill cùng những bản nhạc Lofi 🎵.
+                      </p>
+                      <br />
+                      <p class="section-title">> STATS</p>
+                      <p>
+                        <i class="fas fa-signal" style="color: #22c55e"></i>
+                        Online: <strong id="online-count">...</strong><br />
+                        <i class="fas fa-eye" style="color: #3b82f6"></i>
+                        Visits: <strong id="visit-count">...</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- KHUNG HIỂN THỊ GAME -->
+                <div id="game-display-area" style="display: none">
+                  <button
+                    id="back-to-menu-btn"
+                    onclick="openMonitorApp('games')"
+                  >
+                    <i class="fas fa-arrow-left"></i> BACK
+                  </button>
+                  <div id="tetris-container"></div>
+                  <div id="game2048-container" style="display: none"></div>
+                </div>
+              </div>
+
+              <div class="monitor-decoration">
+                <div class="monitor-logo">NGUYEXNDII</div>
+                <button
+                  class="monitor-power-btn"
+                  onclick="closeAllModals()"
+                  title="Tắt"
+                >
+                  <i class="fas fa-power-off"></i>
+                </button>
+              </div>
+            </div>
+            <div class="monitor-stand-neck"></div>
+            <div class="monitor-stand-base"></div>
+          </div>
+        </div>
+        <button class="modal-close-monitor">&times;</button>
+      </div>
+
+      <!-- About Me -->
+
+      <!-- 🎮 GAMING MODAL -->
+      <div class="modal" id="modal-gaming" style="display: none">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span class="icon">🎮</span>
+            <span>Gaming Profile</span>
+          </div>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-content">
+          <div class="game-card">
+            <div class="game-icon">🎯</div>
+            <div class="game-info">
+              <h4>Valorant</h4>
+              <p>IGN: <strong>Ziicasso</strong></p>
+              <p>Main: <span class="rank">Chamber / Jett</span></p>
+            </div>
+          </div>
+          <div class="game-card">
+            <div class="game-icon wuwa">🌊</div>
+            <div class="game-info">
+              <h4>Wuthering Waves</h4>
+              <p>Status: <span class="rank">Playing</span></p>
+              <p>Favorite: Jiyan, Changli</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ☕ CONTACT MODAL -->
+      <div class="modal" id="modal-contact" style="display: none">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span>Contact Me</span>
+          </div>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-content">
+          <div class="contact-grid">
+            <a
+              href="https://github.com/nguyenxdii"
+              target="_blank"
+              class="contact-link"
+            >
+              <i class="fab fa-github"></i>
+              <span>GitHub - nguyenxdii</span>
+            </a>
+            <a
+              href="https://www.facebook.com/nguyexndii"
+              target="_blank"
+              class="contact-link"
+            >
+              <i class="fab fa-facebook"></i>
+              <span>Facebook - nguyexndii</span>
+            </a>
+            <a href="mailto:nguyexndii.2003@gmail.com" class="contact-link">
+              <i class="fas fa-envelope"></i>
+              <span>Email - nguyexndii.2003@gmail.com</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--  -->
+    <div class="music-indicator">
+      <div class="music-bars">
+        <div class="music-bar"></div>
+        <div class="music-bar"></div>
+        <div class="music-bar"></div>
+        <div class="music-bar"></div>
+      </div>
+      <span class="music-label">Đang phát nhạc</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/room-interactions.js"></script>
+    <script src="js/game-sounds.js"></script>
+    <script src="js/game-2048.js"></script>
+    <script src="js/tetris-game.js"></script>
+    <script src="js/rain-effect.js"></script>
+    <script src="js/anti-inspect.js"></script>
+    <!-- Firebase Visitor Counter -->
+    <script type="module" src="js/visitor-counter.js"></script>
+  </body>
+</html>

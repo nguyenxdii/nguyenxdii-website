@@ -1,0 +1,1921 @@
+/* Phòng ảo tương tác - CSS */
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-dark: #0a0a0a;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent: #a855f7;
+  --accent-glow: rgba(168, 85, 247, 0.5);
+  --modal-bg: rgba(15, 15, 20, 0.95);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family:
+    "Plus Jakarta Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+}
+
+/* Scroll Banner - Thanh chữ chạy vui vui */
+.scroll-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 28px;
+  background: rgba(20, 20, 25, 0.95);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 9999;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.scroll-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: "VT323", monospace;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  animation: scrollText 25s linear infinite;
+  padding-left: 100%;
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
+  }
+}
+
+/* Real-time Clock - Góc trên trái */
+.realtime-clock {
+  position: fixed;
+  top: 32px;
+  left: 12px;
+  background: rgba(20, 20, 25, 0.9);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  z-index: 9998;
+  backdrop-filter: blur(8px);
+}
+
+.clock-time {
+  font-family: "VT323", monospace;
+  font-size: 1.1rem;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+}
+
+/* Ẩn đồng hồ khi modal đang mở */
+.modal-overlay.active ~ .realtime-clock,
+body:has(.modal-overlay.active) .realtime-clock {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Điều chỉnh room container để không bị che bởi banner */
+.room-container {
+  padding-top: 32px;
+}
+
+/* Container phòng */
+.room-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Ambient Light Effects */
+.ambient-effects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.5s ease;
+}
+
+/* Dark mode effects - hiện khi dark, ẩn khi light */
+.dark-effects {
+  opacity: 1;
+}
+.room-container.light-mode .dark-effects {
+  opacity: 0;
+}
+
+/* Light mode effects - ẩn khi dark, hiện khi light */
+.light-effects {
+  opacity: 0;
+}
+.room-container.light-mode .light-effects {
+  opacity: 1;
+}
+
+/* String Lights (Dark mode) - Đèn dây
+   Tọa độ từ image map (viewBox 2752x1536)
+   Điều chỉnh: dịch lên và sang trái một chút */
+.string-light {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 220, 120, 1) 0%,
+    rgba(255, 180, 80, 0.6) 30%,
+    rgba(255, 150, 50, 0.2) 60%,
+    transparent 80%
+  );
+  filter: blur(2px);
+  animation: bulb-flicker 2s ease-in-out infinite;
+}
+
+/* Vị trí đã điều chỉnh - dịch xuống và phải 1 chút */
+.string-light.light-1 {
+  top: 7%;
+  left: 35%;
+  animation-delay: 0s;
+}
+
+.string-light.light-2 {
+  top: 11%;
+  left: 39%;
+  animation-delay: 0.4s;
+}
+
+.string-light.light-3 {
+  top: 12%;
+  left: 43%;
+  animation-delay: 0.8s;
+}
+
+.string-light.light-4 {
+  top: 11%;
+  left: 47%;
+  animation-delay: 1.2s;
+}
+
+.string-light.light-5 {
+  top: 7%;
+  left: 51%;
+  animation-delay: 1.6s;
+}
+
+/* Animation nhấp nháy bóng đèn */
+@keyframes bulb-flicker {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  40% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+  60% {
+    opacity: 0.95;
+    transform: scale(1.05);
+  }
+  80% {
+    opacity: 0.7;
+    transform: scale(0.9);
+  }
+}
+
+/* Lamp Glow (Dark mode) - Ánh sáng đèn bàn
+   Hiệu ứng breathing nhẹ nhàng, không tắt hẳn */
+.lamp-glow {
+  position: absolute;
+  top: 42%;
+  left: 36%;
+  width: 28%;
+  height: 25%;
+  background: radial-gradient(
+    ellipse at 30% 20%,
+    rgba(255, 200, 100, 0.4) 0%,
+    rgba(255, 180, 80, 0.25) 30%,
+    rgba(255, 150, 50, 0.12) 60%,
+    transparent 100%
+  );
+  filter: blur(25px);
+  animation: lamp-breathe 4s ease-in-out infinite;
+  transform-origin: top left;
+}
+
+@keyframes lamp-breathe {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Window Light (Light mode) - Ánh sáng cửa sổ
+   Hiệu ứng chiếu vào rõ ràng hơn với animation breathing */
+.window-light {
+  position: absolute;
+  top: 10%;
+  left: 35%;
+  width: 65%;
+  height: 85%;
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 220, 0.25) 0%,
+    rgba(255, 250, 200, 0.15) 20%,
+    rgba(255, 245, 180, 0.08) 45%,
+    transparent 75%
+  );
+  clip-path: polygon(60% 0%, 0% 55%, 100% 85%, 100% 50%, 100% 0%);
+  animation: sunlight-breathe 5s ease-in-out infinite;
+}
+
+@keyframes sunlight-breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+    filter: blur(0px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(2px);
+  }
+}
+
+.room-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.room-background.active {
+  opacity: 1;
+}
+
+/* SVG Hotspot Overlay - Hoàn toàn vô hình */
+.hotspot-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.hotspot-svg.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Polygon hotspot vô hình */
+.hotspot-polygon {
+  fill: transparent;
+  stroke: none;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.hotspot-polygon:hover {
+  fill: transparent;
+  stroke: none;
+}
+
+/* Hệ thống Modal - Monitor Style override */
+.modal-game,
+.modal-game .modal-content {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.modal-game {
+  width: 92%;
+  max-width: 850px !important;
+  max-height: 85vh !important;
+  transform: none;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-close-monitor {
+  display: none;
+}
+
+/* MONITOR DESIGN - RETRO CRT STYLE */
+.monitor-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 800px;
+}
+
+.monitor-bezel {
+  /* Vỏ nhựa CRT cổ điển - màu be đậm */
+  background: linear-gradient(
+    160deg,
+    #d4cfc5 0%,
+    #b8b2a6 8%,
+    #9e9890 25%,
+    #8a847a 50%,
+    #7a746a 75%,
+    #6a645a 100%
+  );
+  padding: 35px 45px 55px 45px;
+  border-radius: 35px 35px 25px 25px;
+  border: 4px solid #4a4640;
+  box-shadow:
+    /* Viền 3D bề mặt */
+    inset 0 3px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.25),
+    inset 4px 0 0 rgba(255, 255, 255, 0.2),
+    inset -4px 0 0 rgba(0, 0, 0, 0.15),
+    /* Bóng đổ nặng */ 0 25px 80px rgba(0, 0, 0, 0.6),
+    0 10px 30px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  aspect-ratio: 4/3;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Đèn LED xanh - góc trên phải */
+.monitor-power-led.top-led {
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #00ff00 0%, #00cc00 60%, #009900 100%);
+  border-radius: 50%;
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  box-shadow:
+    0 0 8px #00ff00,
+    0 0 16px rgba(0, 255, 0, 0.6),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+  animation: led-pulse 3s ease-in-out infinite;
+  z-index: 5;
+}
+
+@keyframes led-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow:
+      0 0 8px #00ff00,
+      0 0 16px rgba(0, 255, 0, 0.6);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow:
+      0 0 4px #00ff00,
+      0 0 8px rgba(0, 255, 0, 0.3);
+  }
+}
+
+.monitor-screen {
+  background: #0a0a0a;
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+  /* Fix size to prevent expansion */
+  width: 100%;
+  height: 0;
+  padding-bottom: 75%; /* 4:3 Aspect Ratio */
+  /* Remove flex: 1 to avoid flex grow issues */
+
+  /* Viền màn hình CRT cong sâu */
+  box-shadow:
+    inset 0 0 100px rgba(0, 0, 0, 0.95),
+    inset 0 0 40px rgba(0, 0, 0, 0.8),
+    0 0 0 3px #1a1a1a,
+    0 0 0 6px #333;
+  /* display: flex; REMOVED - Using absolute positioning for children */
+  border: 5px solid #222;
+}
+
+/* Force all direct children of monitor-screen to fill the 4:3 container */
+.monitor-screen > * {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* CRT Scanline Effect - đậm hơn */
+.monitor-screen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    /* Scanlines dọc */ repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.03),
+    rgba(0, 0, 0, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+.monitor-screen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    /* Scanlines ngang */ repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.25) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 10;
+  animation: scanline-move 10s linear infinite;
+}
+
+@keyframes scanline-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 150px;
+  }
+}
+
+/* Hiệu ứng ánh sáng CRT phản chiếu */
+.monitor-screen .game-menu::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at 30% 20%,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+.monitor-decoration {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 8px;
+  padding: 0 20px;
+}
+
+/* Nút power - góc dưới phải */
+.monitor-power-btn {
+  position: absolute;
+  right: 25px; /* Adjusted slightly */
+  width: 32px; /* Slightly smaller button */
+  height: 32px;
+  background: linear-gradient(180deg, #5a5650, #3a3630);
+  border: 3px solid #2a2620;
+  border-radius: 50%;
+  color: #666;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+    0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.monitor-power-btn:hover {
+  background: linear-gradient(180deg, #ff5555, #cc3333);
+  color: #fff;
+  border-color: #992222;
+  box-shadow:
+    0 0 15px rgba(255, 80, 80, 0.6),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.monitor-power-btn:active {
+  transform: scale(0.95);
+  box-shadow:
+    0 0 8px rgba(255, 80, 80, 0.4),
+    inset 0 -2px 0 rgba(255, 255, 255, 0.2);
+}
+
+.monitor-logo {
+  color: #3a3630;
+  font-family: "Arial Black", "Arial", sans-serif;
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 4px;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5),
+    0 -1px 0 rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+}
+
+/* LED cũ ẩn đi - dùng class mới top-led */
+.monitor-power-led:not(.top-led) {
+  display: none;
+}
+
+.monitor-stand-neck {
+  display: none;
+}
+
+.monitor-stand-base {
+  display: none;
+}
+
+/* GAME MENU SCREEN */
+#modal-projects .modal-content {
+  max-width: 692px;
+  width: 90%;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+
+  /* Centering */
+  margin: 0;
+  position: absolute;
+  top: 45%; /* Shift up slightly (45% is higher than 50%) */
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.game-menu {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+  color: #fff;
+}
+
+/* MONITOR APPS GENERIC */
+.monitor-app-content {
+  /* Dimensions handled by parent absolute positioning */
+  box-sizing: border-box; /* Include padding in width/height */
+  background: #0c0c0c;
+  color: #00ff00; /* Terminal Green */
+  font-family: "Courier New", Courier, monospace;
+  padding: 1.5rem; /* Reduced padding to save space */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 10; /* Ensure content is above background effects */
+}
+
+.back-btn {
+  background: transparent;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  padding: 5px 10px;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-bottom: 1rem;
+  font-family: inherit;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: #00ff00;
+  color: #000;
+}
+
+.app-scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* ABOUT ME APP (Terminal Style) */
+.terminal-header {
+  color: #fff;
+  border-bottom: 1px dashed #444;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+.term-user {
+  color: #00ff00;
+  font-weight: bold;
+}
+
+.about-content-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-shadow: 0 0 2px rgba(0, 255, 0, 0.3);
+}
+
+.about-content-text strong {
+  color: #fff;
+}
+
+.section-title {
+  color: #ffff00; /* Yellow for headers */
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.scroller::-webkit-scrollbar {
+  width: 5px;
+}
+.scroller::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
+.menu-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 3rem;
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+  background: linear-gradient(135deg, #fff, #00f5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.game-cards {
+  display: flex;
+  gap: 2rem;
+}
+
+.menu-game-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 160px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu-game-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent);
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.card-icon {
+  font-size: 3rem;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.menu-footer {
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  color: #666;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* GAME DISPLAY & BACK BUTTON */
+#game-display-area {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#back-to-menu-btn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 100;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+#back-to-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: #fff;
+}
+
+/* Hệ thống Modal cũ giữ nguyên cho các modal khác */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: var(--modal-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  transform: scale(0.9) translateY(20px);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-overlay.active .modal {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.modal-title .icon {
+  font-size: 1.5rem;
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.25rem;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  transform: rotate(90deg);
+}
+
+.modal-content {
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: calc(80vh - 80px);
+}
+
+/* Thẻ dự án */
+.project-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.project-item {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.project-item:hover {
+  border-color: var(--accent);
+  transform: translateX(5px);
+}
+
+.project-item h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.project-item p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--accent);
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Danh sách sách */
+.book-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.book-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.book-item:hover {
+  border-color: var(--accent);
+  background: rgba(168, 85, 247, 0.05);
+}
+
+.book-cover {
+  width: 50px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--accent), #6366f1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.book-info h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.book-info p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* Phần giới thiệu */
+.about-section {
+  margin-bottom: 1.5rem;
+}
+
+.about-section:last-child {
+  margin-bottom: 0;
+}
+
+.about-section h4 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.about-section p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.skill-badge:hover {
+  border-color: var(--accent);
+}
+
+/* Profile Gaming */
+.game-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.game-card:last-child {
+  margin-bottom: 0;
+}
+
+.game-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.game-icon.valorant {
+  background: linear-gradient(135deg, #ff4655, #ff7f7f);
+}
+
+.game-icon.wuwa {
+  background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+}
+
+.game-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.game-info p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.game-info .rank {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Link liên hệ */
+.contact-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.contact-link:hover {
+  border-color: var(--accent);
+  transform: translateX(5px);
+}
+
+.contact-link i {
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.contact-link span {
+  font-size: 0.95rem;
+}
+
+/* Thanh hiển thị nhạc đang phát */
+.music-indicator {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--modal-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px;
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.music-indicator.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.music-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+}
+
+.music-bar {
+  width: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: music-bar 0.5s ease-in-out infinite alternate;
+}
+
+.music-bar:nth-child(1) {
+  height: 8px;
+  animation-delay: 0s;
+}
+.music-bar:nth-child(2) {
+  height: 16px;
+  animation-delay: 0.1s;
+}
+.music-bar:nth-child(3) {
+  height: 12px;
+  animation-delay: 0.2s;
+}
+.music-bar:nth-child(4) {
+  height: 16px;
+  animation-delay: 0.3s;
+}
+
+@keyframes music-bar {
+  from {
+    height: 4px;
+  }
+  to {
+    height: 16px;
+  }
+}
+
+.music-indicator.paused .music-bar {
+  animation: none;
+  height: 4px;
+}
+
+.music-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Menu Mobile */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark);
+  z-index: 500;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.mobile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.mobile-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #fff, var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mobile-header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.mobile-nav {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.mobile-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav-item:hover,
+.mobile-nav-item:active {
+  border-color: var(--accent);
+  background: rgba(168, 85, 247, 0.05);
+}
+
+.mobile-nav-item .nav-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  text-align: center;
+}
+
+.mobile-nav-item .nav-text h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.mobile-nav-item .nav-text p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* Responsive - Mobile hiển thị room giống PC */
+@media (max-width: 480px) {
+  /* Giữ room container, chỉ ẩn menu */
+  .mobile-menu {
+    display: none !important;
+  }
+
+  .music-indicator {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+/* ============================================
+   MOBILE WARNING STYLES
+   ============================================ */
+.mobile-warning-container {
+  display: none; /* Ẩn trên PC */
+}
+
+/* Mobile: Hiện warning, ẩn room */
+@media (max-width: 768px) {
+  .mobile-warning-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+  }
+
+  .room-container,
+  .scroll-banner {
+    display: none !important;
+  }
+
+  .warning-content {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    animation: fadeInUp 0.5s ease;
+  }
+
+  .warning-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.4));
+  }
+
+  .warning-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--accent), #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+  }
+
+  .warning-content p {
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+
+  .warning-sub {
+    color: var(--text-secondary) !important;
+    font-size: 0.85rem !important;
+    margin-top: 1.5rem;
+    font-style: italic;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+  }
+}
+
+/* Mobile landscape improvements */
+@media (max-width: 900px) and (orientation: landscape) {
+  .scroll-banner {
+    height: 24px;
+  }
+
+  .scroll-text {
+    font-size: 0.85rem;
+  }
+
+  .room-container {
+    padding-top: 24px;
+  }
+}
+
+/* Ẩn menu trên tất cả kích thước */
+.mobile-menu {
+  display: none !important;
+}
+
+/* Rotate Overlay - Yêu cầu xoay ngang */
+.rotate-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  z-index: 99999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.rotate-content {
+  animation: fadeInUp 0.5s ease;
+}
+
+.rotate-overlay .rotate-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: rotatePhone 2s ease-in-out infinite;
+}
+
+.rotate-overlay h2 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.rotate-overlay p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+@keyframes rotatePhone {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hiển thị rotate overlay trên mobile portrait */
+@media (max-width: 768px) and (orientation: portrait) {
+  .rotate-overlay {
+    display: flex !important;
+  }
+}
+
+/* Room Hint - Gợi ý cho người dùng mới */
+.room-hint {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  background: var(--modal-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px;
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  animation: hintFadeInOut 5s ease-in-out forwards;
+}
+
+.hint-icon {
+  font-size: 1.25rem;
+}
+
+.hint-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+@keyframes hintFadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+    pointer-events: none;
+  }
+}
+
+/* Ẩn hint khi có rotate overlay (mobile portrait) */
+@media (max-width: 768px) and (orientation: portrait) {
+  .room-hint {
+    display: none;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Tetris Game Styles */
+.modal-game {
+  max-width: 600px;
+  max-height: 95vh;
+}
+
+.modal-game .modal-content {
+  padding: 1.5rem;
+  max-height: calc(95vh - 80px);
+  overflow-y: auto;
+}
+
+.tetris-wrapper {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.tetris-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 90px;
+}
+
+.tetris-score,
+.tetris-level,
+.tetris-lines {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.tetris-info .label {
+  display: block;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.2rem;
+}
+
+.tetris-info .value {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.tetris-controls {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.tetris-controls .label {
+  display: block;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+.tetris-next {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tetris-next .label {
+  display: block;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+.tetris-next-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+  width: 60px;
+  height: 30px;
+}
+
+.tetris-next-cell {
+  width: 100%;
+  height: 100%;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.control-hint {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.tetris-board {
+  display: grid;
+  grid-template-columns: repeat(10, 20px);
+  grid-template-rows: repeat(20, 20px);
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--glass-border);
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.tetris-cell {
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  transition: background-color 0.1s ease;
+}
+
+.tetris-cell.active {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.tetris-cell.filled {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Game Over Overlay */
+.tetris-gameover {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.gameover-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.gameover-content h2 {
+  font-size: 1.5rem;
+  color: #f44336;
+  margin-bottom: 1rem;
+}
+
+.gameover-content p {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+#tetris-restart {
+  margin-top: 1rem;
+  padding: 0.75rem 2rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#tetris-restart:hover {
+  background: #9333ea;
+  transform: scale(1.05);
+}
+
+/* 2048 Game Styles */
+.game2048-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.game2048-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.game2048-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.game2048-scores {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.score-box {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  min-width: 70px;
+}
+
+.score-box .label {
+  display: block;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.score-box .value {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.game2048-hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.game2048-board {
+  display: grid;
+  grid-template-columns: repeat(4, 60px);
+  grid-template-rows: repeat(4, 60px);
+  gap: 8px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  touch-action: none;
+}
+
+.game2048-tile {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  transition: all 0.15s ease;
+}
+
+.tile-2 {
+  background: #eee4da;
+  color: #776e65;
+}
+.tile-4 {
+  background: #ede0c8;
+  color: #776e65;
+}
+.tile-8 {
+  background: #f2b179;
+  color: #f9f6f2;
+}
+.tile-16 {
+  background: #f59563;
+  color: #f9f6f2;
+}
+.tile-32 {
+  background: #f67c5f;
+  color: #f9f6f2;
+}
+.tile-64 {
+  background: #f65e3b;
+  color: #f9f6f2;
+}
+.tile-128 {
+  background: #edcf72;
+  color: #f9f6f2;
+  font-size: 1.3rem;
+}
+.tile-256 {
+  background: #edcc61;
+  color: #f9f6f2;
+  font-size: 1.3rem;
+}
+.tile-512 {
+  background: #edc850;
+  color: #f9f6f2;
+  font-size: 1.3rem;
+}
+.tile-1024 {
+  background: #edc53f;
+  color: #f9f6f2;
+  font-size: 1rem;
+}
+.tile-2048 {
+  background: #edc22e;
+  color: #f9f6f2;
+  font-size: 1rem;
+}
+
+.game2048-restart {
+  padding: 0.6rem 1.5rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.game2048-restart:hover {
+  background: #9333ea;
+  transform: scale(1.05);
+}
+
+.game2048-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.game2048-overlay .overlay-content {
+  text-align: center;
+}
+
+.game2048-overlay h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.game2048-overlay p {
+  color: var(--text-secondary);
+}
+
+/* Stats Counter Styles */
+.visitor-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.stat-value {
+  font-weight: bold;
+  color: var(--accent);
+  min-width: 20px;
+}
+
+.stat-icon {
+  font-size: 0.8rem;
+}
+
+/* Rain Effect Styles */
+.rain-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4; /* Above background (1), below ambient (5) */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease;
+  /* Mask canvas to window area (Precise Coordinates) */
+  /* Coords: 1552,217 -> 2779,217 -> 2776,809 -> 1544,814 */
+  /* Assuming ViewBox 2752x1536 */
+  /* Left: ~56%, Top: ~14%, Right: 100%, Bottom: ~53% */
+  /* clip-path handled by JS for multiple windows */
+}
+
+.rain-canvas.active {
+  opacity: 1; /* Hiển thị rõ hạt mưa */
+  /* backdrop-filter removed for sharp visibility */
+}
+
+/* Rain Backgrounds */
+.room-bg-dark-rain,
+.room-bg-light-rain {
+  opacity: 0;
+  z-index: 2; /* Overlap normal bg (1) when active */
+  transition: opacity 1s ease;
+}
+
+.room-bg-dark-rain.active,
+.room-bg-light-rain.active {
+  opacity: 1;
+}
+
+/* Cat Rain Hotspot - Hidden by default */
+.cat-rain {
+  display: none;
+}
