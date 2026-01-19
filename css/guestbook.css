@@ -925,10 +925,9 @@
   pointer-events: none;
 }
 
-/* Show picker on hover over REACTION CONTAINER */
-.reaction-container:hover .reaction-picker,
-.reaction-picker:hover,
-.reaction-trigger-btn:hover .reaction-picker {
+/* Show picker ONLY on hover over TRIGGER BUTTON */
+.reaction-trigger-btn:hover .reaction-picker,
+.reaction-picker:hover {
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1);
@@ -936,8 +935,8 @@
   transition-delay: 0s; /* Instant show */
 }
 
-/* Auto-hide after 1 seconds when not hovering */
-.reaction-container:not(:hover) .reaction-picker:not(:hover) {
+/* Auto-hide after 1 seconds when not hovering trigger button */
+.reaction-trigger-btn:not(:hover) .reaction-picker:not(:hover) {
   transition-delay: 1s; /* Reduced from 2s to feel snappier but safe */
 }
 
